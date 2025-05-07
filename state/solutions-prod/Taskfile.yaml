@@ -1,0 +1,25 @@
+version: '3'
+
+includes:
+  shared: ../Taskfile.yaml
+
+vars:
+  UPBOUND_ORG: "upbound"
+  UPBOUND_ORG_TEAM: "CI"
+  UPBOUND_PAT_PATH: ""
+  SPACE: "space-the-final-frontier"
+  ROOT_GROUP_NAME: "solutions-prod"
+  ROOT_CTP_NAME: "bootstrap"
+  GIT_REPO: "https://github.com/haarchri/solutions.git"
+  GIT_REVISION: "main"
+
+tasks:
+  bootstrap:
+    desc: Bootstrap prod environment
+    cmds:
+      - task: shared:check-up-profile
+      - task: shared:bootstrap-group
+      - task: shared:bootstrap-ctp
+      - task: shared:bootstrap-configurations
+      - task: shared:bootstrap-provider-kubernetes-with-pat
+      - task: shared:bootstrap-argocd-application

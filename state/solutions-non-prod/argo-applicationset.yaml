@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: environments
+  namespace: argo-system
+spec:
+  generators:
+    - git:
+        repoURL: https://github.com/haarchri/solutions.git
+        revision: main
+        directories:
+          - path: state/solutions-non-prod/*
+  template:
+    metadata:
+      name: '{{path.basename}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/haarchri/solutions.git
+        targetRevision: main
+        path: '{{path}}'
+      destination:
+        name: 'solutions-non-prod-{{path.basename}}/{{path.basename}}'
+        namespace: default
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true

@@ -1,0 +1,30 @@
+version: '3'
+
+includes:
+  solutions-non-prod: state/solutions-non-prod/Taskfile.yaml
+  # solutions-prod: state/solutions-prod/Taskfile.yaml
+
+vars:
+  GITOPS_STATE_FOLDER: "state"
+  UP_VERSION: "v0.39.0"
+
+tasks:
+  # ToDo: use up from a local path if not installed
+  check-up:
+    desc: Ensure 'up' CLI is installed
+    silent: true
+    cmds:
+      - |
+        if ! command -v up &> /dev/null; then
+          echo "'up' not found, installing..."
+          curl -sL "https://cli.upbound.io" | VERSION={{.UP_VERSION}} sh
+        else
+          echo "'up' is already installed."
+        fi
+
+  bootstrap-all:
+    desc: Bootstrap all root groups
+    deps: [check-up]
+    cmds:
+      - task: solutions-non-prod:bootstrap
+      # - task: solutions-prod:bootstrap

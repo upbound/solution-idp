@@ -1,0 +1,17 @@
+apiVersion: sa.upbound.io/v1
+kind: XEnvironment
+metadata:
+  name: network
+spec:
+  parameters:
+    aws:
+      accountId: "609897127049"
+      region: eu-central-1
+      credsSecretRef:
+        name: aws-creds
+        namespace: crossplane-system
+    upbound:
+      initKubeconfigSecretRef:
+        name: bootstrap-ctp-kubeconfig
+      tokenSecretRef:
+        name: solutions-non-prod-bootstrap-token
