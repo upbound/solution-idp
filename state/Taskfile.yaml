@@ -1,0 +1,298 @@
+version: '3'
+
+tasks:
+  check-up-profile:
+    cmds:
+     - |
+        CLI_ORG=$(up profile current | jq -r '.profile.organization')
+        if [ "{{.UPBOUND_ORG}}" != "${CLI_ORG}" ]; then
+          echo "The organization configured in up-cli (${CLI_ORG}) does not match configured ({{.UPBOUND_ORG}})"
+          exit 1
+        fi
+
+  up-ctx-space:
+    internal: true
+    cmds:
+      - up ctx {{.UPBOUND_ORG}}/{{.SPACE}}
+
+  up-ctx-group:
+    internal: true
+    cmds:
+      - up ctx {{.UPBOUND_ORG}}/{{.SPACE}}/{{.ROOT_GROUP_NAME}}
+
+  up-ctx-ctp:
+    internal: true
+    cmds:
+      - up ctx {{.UPBOUND_ORG}}/{{.SPACE}}/{{.ROOT_GROUP_NAME}}/{{.ROOT_CTP_NAME}}
+
+  bootstrap-group:
+    internal: true
+    deps:
+      - task: up-ctx-space
+    cmds:
+      - up group get {{.ROOT_GROUP_NAME}} || up group create {{.ROOT_GROUP_NAME}}
+
+  bootstrap-ctp:
+    internal: true
+    deps:
+      - task: up-ctx-group
+    cmds:
+      - up ctp get {{.ROOT_CTP_NAME}} || up ctp create {{.ROOT_CTP_NAME}} --crossplane-channel="Rapid"
+      - |
+          until [ "$(kubectl get ctp {{.ROOT_CTP_NAME}} -ojsonpath='{.status.message}')" == "Available" ]; do
+            echo "Waiting for CTP {{.ROOT_CTP_NAME}} to be ready..."
+            sleep 30
+          done
+
+  bootstrap-configurations:
+    internal: true
+    deps:
+      - task: up-ctx-ctp
+    cmds:
+      - |
+          CONFIGS_FILE="{{.GITOPS_STATE_FOLDER}}/{{.ROOT_GROUP_NAME}}/configurations.yaml"
+          if [ -f "$CONFIGS_FILE" ]; then
+            kubectl apply -f "$CONFIGS_FILE"
+            CONFIGS=$(yq e 'select(.kind == "Configuration") | .metadata.name' "$CONFIGS_FILE" | tr '\n' ' ')
+            kubectl wait configuration.pkg --all --for=condition=Healthy --timeout 10m
+            kubectl wait configuration.pkg --all --for=condition=Installed --timeout 10m
+            kubectl wait configurationrevisions.pkg --all --for=condition=Healthy --timeout 10m
+            kubectl wait provider.pkg --all --for condition=Healthy --timeout 10m
+            kubectl -n crossplane-system wait --for=condition=Available deployment --all --timeout=5m
+            kubectl wait xrd --all --for condition=Established
+          fi
+
+  create-environments:
+    internal: true
+    deps:
+      - task: up-ctx-ctp
+    cmds:
+      - |
+          ENV_FILE="{{.GITOPS_STATE_FOLDER}}/{{.ROOT_GROUP_NAME}}/environments.yaml"
+          if [ -f "$ENV_FILE" ]; then
+            kubectl apply -f "$ENV_FILE"
+          fi
+
+  bootstrap-provider-kubernetes-with-pat:
+    internal: true
+    desc: Configure Personal Access Token in Kubernetes Secret
+    vars:
+      TOKEN_SECRET_NAME: '{{.TOKEN_SECRET_NAME | default (printf "%s-%s-token" .ROOT_GROUP_NAME .ROOT_CTP_NAME)}}'
+    deps:
+      - task: up-ctx-ctp
+    cmds:
+      - |
+        up token get {{.TOKEN_SECRET_NAME}} || up token create {{.TOKEN_SECRET_NAME}}
+        if up token get {{.TOKEN_SECRET_NAME}} &>/dev/null; then
+          up token delete {{.TOKEN_SECRET_NAME}} --force
+        fi
+        UPBOUND_TOKEN_RAW=$(up token create {{.TOKEN_SECRET_NAME}} -f -)
+        UPBOUND_TOKEN=$(echo "$UPBOUND_TOKEN_RAW" | jq -r '.token')
+        UPBOUND_ACCESS_ID=$(echo "$UPBOUND_TOKEN_RAW" | jq -r '.accessId')
+
+        cat <<EOF | kubectl apply -f -
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: {{.TOKEN_SECRET_NAME}}
+            namespace: default
+            labels:
+              accessId: $UPBOUND_ACCESS_ID
+          type: Opaque
+          stringData:
+            token: $UPBOUND_TOKEN
+        EOF
+      - task: configure-provider-kubernetes
+
+  bootstrap-provider-kubernetes-with-robot:
+    internal: true
+    desc: Configure TEAM Access, Robot and Robot Token in Kubernetes Secret
+    vars:
+      TOKEN_SECRET_NAME: '{{.TOKEN_SECRET_NAME | default (printf "%s-%s-token" .ROOT_GROUP_NAME .ROOT_CTP_NAME)}}'
+    deps:
+      - task: up-ctx-ctp
+    cmds:
+      - |
+        up robot get {{.TOKEN_SECRET_NAME}} || up robot create {{.TOKEN_SECRET_NAME}} --organization={{.UPBOUND_ORG}}
+        if up robot token get {{.TOKEN_SECRET_NAME}} {{.TOKEN_SECRET_NAME}} --organization={{.UPBOUND_ORG}} &>/dev/null; then
+          up robot token delete {{.TOKEN_SECRET_NAME}} {{.TOKEN_SECRET_NAME}} --organization={{.UPBOUND_ORG}} --force
+        fi
+        UPBOUND_TOKEN=$(up robot token create {{.TOKEN_SECRET_NAME}} {{.TOKEN_SECRET_NAME}} --organization={{.UPBOUND_ORG}} -f - | jq -r '.token'
+
+        up robot team join {{.UPBOUND_ORG_TEAM}} {{.TOKEN_SECRET_NAME}} --organization={{.UPBOUND_ORG}}
+
+        cat <<EOF | kubectl apply -f -
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: {{.TOKEN_SECRET_NAME}}
+            namespace: default
+          type: Opaque
+          stringData:
+            token: $UPBOUND_TOKEN
+        EOF
+      - task: configure-provider-kubernetes
+      - task: configure-robot-team-group-access
+
+  configure-provider-kubernetes:
+    internal: true
+    desc: Configure provider-kubernetes providerconfig and secrets with up ctx kubeconfig.
+    vars:
+      TOKEN_SECRET_NAME: '{{.TOKEN_SECRET_NAME | default (printf "%s-%s-token" .ROOT_GROUP_NAME .ROOT_CTP_NAME)}}'
+      KUBECONFIG_SECRET_NAME: '{{.KUBECONFIG_SECRET_NAME | default (printf "%s-ctp-kubeconfig" .ROOT_CTP_NAME)}}'
+      PROVIDERCONFIG_NAME: '{{.PROVIDERCONFIG_NAME | default (printf "%s-ctp" .ROOT_CTP_NAME)}}'
+      KUBECONFIG_SPACE: '{{.KUBECONFIG_SPACE | default .SPACE }}'
+      KUBECONFIG_ORG: '{{.KUBECONFIG_ORG | default .UPBOUND_ORG }}'
+      KUBECONFIG_GROUP: '{{.KUBECONFIG_GROUP | default .ROOT_GROUP_NAME }}'
+      KUBECONFIG_CTP: '{{.KUBECONFIG_CTP | default .ROOT_CTP_NAME }}'
+    deps:
+      - task: up-ctx-ctp
+    cmds:
+      - |
+        KUBECONFIG_B64=$(up ctx {{.KUBECONFIG_ORG}}/{{.KUBECONFIG_SPACE}}/{{.KUBECONFIG_GROUP}}/{{.KUBECONFIG_CTP}} -f - | base64 -w0)
+
+        cat <<EOF | kubectl apply -f -
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: {{.KUBECONFIG_SECRET_NAME}}
+            namespace: default
+          type: Opaque
+          data:
+            kubeconfig: $KUBECONFIG_B64
+        EOF
+
+        cat <<EOF | kubectl apply -f -
+          apiVersion: kubernetes.crossplane.io/v1alpha1
+          kind: ProviderConfig
+          metadata:
+            name: {{.PROVIDERCONFIG_NAME}}
+          spec:
+            credentials:
+              source: Secret
+              secretRef:
+                name: {{.KUBECONFIG_SECRET_NAME}}
+                namespace: default
+                key: kubeconfig
+            identity:
+              type: UpboundTokens
+              source: Secret
+              secretRef:
+                name: {{.TOKEN_SECRET_NAME}}
+                namespace: default
+                key: token
+        EOF
+
+  configure-robot-team-group-access:
+    internal: true
+    desc: Configure robot team group access
+    deps:
+      - task: up-ctx-group
+    cmds:
+      - |
+        TEAM_ID=$(up team get {{.UPBOUND_ORG_TEAM}} --format=json | jq -r '.id')
+
+        cat <<EOF | kubectl apply -f -
+          apiVersion: authorization.spaces.upbound.io/v1alpha1
+          kind: ObjectRoleBinding
+          metadata:
+            labels:
+              authorization.spaces.upbound.io/object-apigroup: core
+              authorization.spaces.upbound.io/object-name: {{.ROOT_GROUP_NAME}}
+              authorization.spaces.upbound.io/object-resource: namespaces
+            name: {{.ROOT_GROUP_NAME}}-5mzvw
+            namespace: {{.ROOT_GROUP_NAME}}
+          spec:
+            object:
+              apiGroup: core
+              name: {{.ROOT_GROUP_NAME}}
+              resource: namespaces
+            subjects:
+            - kind: UpboundTeam
+              name: $TEAM_ID
+              role: admin
+        EOF
+
+  bootstrap-argocd-application:
+    internal: true
+    desc: Configure argocd application for bootstrap controlplane
+    deps:
+      - task: up-ctx-ctp
+    cmds:
+      - |
+        cat <<EOF | kubectl apply -f -
+          apiVersion: argoproj.io/v1alpha1
+          kind: Application
+          metadata:
+            name: {{.ROOT_GROUP_NAME}}
+            namespace: argocd
+          spec:
+            project: default
+            source:
+              repoURL: {{.GIT_REPO}}
+              targetRevision: {{.GIT_REVISION}}
+              path: {{.GITOPS_STATE_FOLDER}}/{{.ROOT_GROUP_NAME}}
+            destination:
+              server: https://kubernetes.default.svc
+              namespace: default
+            syncPolicy:
+              automated:
+                prune: true
+                selfHeal: true
+        EOF
+
+
+  bootstrap-aws-credentials:
+    internal: true
+    desc: Configure aws-credentials as kubernetes secret
+    deps:
+      - task: up-ctx-ctp
+    cmds:
+      - |
+        AWS_CREDS=$(cat {{.AWS_CREDENTIALS_PATH}})
+        kubectl -n crossplane-system create secret generic aws-creds --from-literal=credentials="$AWS_CREDS" --dry-run=client -o yaml | kubectl apply -f -
+
+  deploy-group:
+    internal: true
+    desc: Deploy manifests for all environments in a root group
+    deps:
+      - task: up-ctx-ctp
+    cmds:
+      - |
+          ENVS=$(find {{.GITOPS_STATE_FOLDER}}/{{.ROOT_GROUP_NAME}} -mindepth 1 -maxdepth 1 -type d | sed "s|{{.GITOPS_STATE_FOLDER}}/{{.ROOT_GROUP_NAME}}/||")
+          for ENV in $ENVS; do
+            up ctx "{{.UPBOUND_ORG}}/{{.SPACE}}/{{.ROOT_GROUP_NAME}}-${ENV}/${ENV}"
+            kubectl apply -f "{{.GITOPS_STATE_FOLDER}}/{{.ROOT_GROUP_NAME}}/${ENV}"
+          done
+
+  post-bootstrap:
+    internal: true
+    desc: Show that bootstrap is done and next-step commands
+    cmds:
+      - |
+        echo
+        echo "✅ Bootstrap complete! You can now explore your control plane:"
+        echo
+        echo "  1) Select the new control plane context:"
+        echo "       up ctx {{.UPBOUND_ORG}}/{{.SPACE}}/{{.ROOT_GROUP_NAME}}/{{.ROOT_CTP_NAME}}"
+        echo
+        echo "  2) Inspect available Kubernetes API resources:"
+        echo "       kubectl api-resources"
+        echo
+        echo "  3) List Crossplane Package Revisions:"
+        echo "       kubectl get pkgrev"
+        echo
+        echo "  4) List Argo ApplicationSets:"
+        echo "       kubectl get applicationsets -A"
+        echo
+        echo "  5) List Argo Applications:"
+        echo "       kubectl get applications -A"
+        echo
+        echo "  6) List Environments:"
+        echo "       kubectl get xenvironments"
+        echo
+        echo "For questions or issues, please consult:"
+        echo "  • GitHub: https://github.com/upbound/solution-idp"
+        echo "  • Docs:   https://docs.upbound.io"
+        echo "  • Slack:  https://slack.crossplane.io (channel #upbound)"
+        echo

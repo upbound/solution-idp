@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: environments
+  namespace: argocd
+spec:
+  generators:
+    - git:
+        repoURL: https://github.com/upbound/solution-idp.git
+        revision: main
+        directories:
+          - path: state/solution-idp-non-prod/*
+  template:
+    metadata:
+      name: 'solution-idp-non-prod-{{path.basename}}-{{path.basename}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/upbound/solution-idp.git
+        targetRevision: main
+        path: '{{path}}'
+      destination:
+        name: 'solution-idp-non-prod-{{path.basename}}-{{path.basename}}'
+        namespace: default
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true

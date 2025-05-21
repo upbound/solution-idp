@@ -1,0 +1,52 @@
+version: '3'
+
+includes:
+  solution-idp-non-prod: state/solution-idp-non-prod/Taskfile.yaml
+  # solution-idp-prod: state/solution-idp-prod/Taskfile.yaml
+
+vars:
+  GITOPS_STATE_FOLDER: "state"
+  UP_VERSION: "v0.39.0-8.gfb176095"
+  UP_CHANNEL: "main"
+  UP_OUTPUT_DIR: "_output"
+  UP_BINARY: "{{.UP_OUTPUT_DIR}}/up"
+
+# globally inject our output directory at the front of PATH
+env:
+  PATH: '{{.PWD}}/_output:{{ env "PATH" }}'
+
+tasks:
+  check-up:
+    desc: Ensure `up` CLI is installed in `_output`
+    silent: true
+    cmds:
+      - mkdir -p "{{.UP_OUTPUT_DIR}}"
+      - |
+        echo "Looking for binary at: {{.PWD}}/{{.UP_OUTPUT_DIR}}/up"
+        if [ ! -x "{{.UP_BINARY}}" ]; then
+          echo "'up' not found in {{.UP_OUTPUT_DIR}}, installing {{.UP_VERSION}}…"
+          # Run the official installer (it will drop ./up here)
+          if ! curl -sL "https://cli.upbound.io" | VERSION={{.UP_VERSION}} CHANNEL={{.UP_CHANNEL}} sh; then
+            echo "Failed to download up CLI"
+            exit 1
+          fi
+          # Move the freshly-created ./up into our output folder
+          if [ -x "./up" ]; then
+            mv ./up "{{.UP_BINARY}}"
+            chmod +x "{{.UP_BINARY}}"
+            echo "Moved up to {{.UP_BINARY}}"
+            echo "New binary permissions: $(ls -la {{.UP_BINARY}})"
+          else
+            echo "installer didn't produce ./up"
+            exit 1
+          fi
+        else
+          echo "up binary already exists at {{.UP_BINARY}}"
+        fi
+
+  bootstrap-all:
+    desc: Bootstrap all root groups
+    deps: [check-up]
+    cmds:
+      - task: solution-idp-non-prod:bootstrap
+      # - task: solution-idp-prod:bootstrap
