@@ -105,10 +105,10 @@ spec:
         name: bootstrap-ctp-kubeconfig
       tokenSecretRef:
         name: solution-idp-non-prod-bootstrap-token
-    secretSync:
-      - destRef:
-          name: aws-creds
-          namespace: crossplane-system
-        sourceRef:
-          name: aws-creds
-          namespace: crossplane-system
+      secretSync:
+        - destRef:
+            name: aws-creds
+            namespace: crossplane-system
+          sourceRef:
+            name: aws-creds
+            namespace: crossplane-system
