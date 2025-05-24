@@ -1,22 +1,22 @@
-# apiVersion: aws.platform.upbound.io/v1alpha1
-# kind: XEKS
-# metadata:
-#   name: solution-idp-non-prod-frontend
-#   annotations:
-#     argocd.argoproj.io/sync-wave: "20"
-# spec:
-#   parameters:
-#     id: solution-idp-non-prod-frontend
-#     region: us-west-2
-#     version: "1.27"
-#     accessConfig:
-#       authenticationMode: API_AND_CONFIG_MAP
-#       bootstrapClusterCreatorAdminPermissions: true
-#     iam:
-#       principalArn: arn:aws:iam::609897127049:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_AdministratorAccess_d703c73ed340fde7
-#     nodes:
-#       count: 1
-#       instanceType: t3.small
-#   writeConnectionSecretToRef:
-#     name: solution-idp-non-prod-frontend-kubeconfig
-#     namespace: upbound-system
+apiVersion: aws.platform.upbound.io/v1alpha1
+kind: XEKS
+metadata:
+  name: solution-idp-non-prod-frontend
+  annotations:
+    argocd.argoproj.io/sync-wave: "20"
+spec:
+  parameters:
+    id: solution-idp-non-prod-frontend
+    region: us-west-2
+    version: "1.27"
+    accessConfig:
+      authenticationMode: API_AND_CONFIG_MAP
+      bootstrapClusterCreatorAdminPermissions: true
+    iam:
+      principalArn: arn:aws:iam::609897127049:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_AdministratorAccess_d703c73ed340fde7
+    nodes:
+      count: 1
+      instanceType: t3.small
+  writeConnectionSecretToRef:
+    name: solution-idp-non-prod-frontend-kubeconfig
+    namespace: upbound-system

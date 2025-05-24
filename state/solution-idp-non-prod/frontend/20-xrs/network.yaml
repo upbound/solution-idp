@@ -1,10 +1,10 @@
-# apiVersion: aws.platform.upbound.io/v1alpha1
-# kind: XNetwork
-# metadata:
-#   name: solution-idp-non-prod-frontend
-#   annotations:
-#     argocd.argoproj.io/sync-wave: "20"
-# spec:
-#   parameters:
-#     id: solution-idp-non-prod-frontend
-#     region: us-west-2
+apiVersion: aws.platform.upbound.io/v1alpha1
+kind: XNetwork
+metadata:
+  name: solution-idp-non-prod-frontend
+  annotations:
+    argocd.argoproj.io/sync-wave: "20"
+spec:
+  parameters:
+    id: solution-idp-non-prod-frontend
+    region: us-west-2
