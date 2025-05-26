@@ -1,0 +1,61 @@
+apiVersion: sa.upbound.io/v1alpha1
+kind: XBackstage
+metadata:
+  name: solution-idp
+spec:
+  parameters:
+    id: "solution-idp-non-prod-frontend"
+    region: "us-west-2"
+    providerConfigName: "default"
+    ingress:
+      enabled: true
+      host: "backstage-solution-idp.upboundrocks.cloud"
+      clusterIssuer: "letsencrypt-prod"
+      className: "nginx"
+    replicas: 3
+    image:
+      registry: docker.io
+      repository: haarchri/solution-idp_backstage
+      tag: v0.1.0
+    config:
+      app:
+        title: "solution-idp"
+      kubernetesIngestor:
+        mappings:
+          systemModel: "cluster-namespace"
+        components:
+          customWorkloadTypes:
+            - group: "aws.platform.upbound.io"
+              apiVersion: "v1alpha1"
+              plural: "xeks"
+            - group: "aws.platform.upbound.io"
+              apiVersion: "v1alpha1"
+              plural: "xnetworks"
+            - group: "aws.platform.upbound.io"
+              apiVersion: "v1alpha1"
+              plural: "xpodidentities"
+            - group: "pkg.crossplane.io"
+              apiVersion: "v1"
+              plural: "providers"
+    infrastructure:
+      ingressNginx:
+        enabled: true
+      certManager:
+        enabled: true
+      lbController:
+        enabled: true
+      externalDNS:
+        enabled: true
+        # upboundrocks.cloud
+        route53ZoneId: "Z0115025YFQ7ZQF6BJ6N"
+      eks:
+        enabled: true
+        accessConfig:
+          bootstrapClusterCreatorAdminPermissions: true
+          authenticationMode: API
+        iam:
+          principalArn: arn:aws:iam::609897127049:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_AdministratorAccess_d703c73ed340fde7
+        version: "1.27"
+        nodes:
+          count: 1
+          instanceType: "m4.2xlarge"

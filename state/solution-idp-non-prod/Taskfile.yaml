@@ -1,0 +1,28 @@
+version: '3'
+
+includes:
+  shared: ../Taskfile.yaml
+
+vars:
+  AWS_CREDENTIALS_PATH: "/Users/haarchri/.aws/aws.json"
+  UPBOUND_ORG: "upbound"
+  UPBOUND_ORG_TEAM: "CI"
+  SPACE: "space-the-final-frontier"
+  ROOT_GROUP_NAME: "solution-idp-non-prod"
+  ROOT_CTP_NAME: "bootstrap"
+  GIT_REPO: "https://github.com/upbound/solution-idp.git"
+  GIT_REVISION: "main"
+
+tasks:
+  bootstrap:
+    desc: Bootstrap non-prod environment
+    cmds:
+      - task: shared:check-up-profile
+      - task: shared:bootstrap-group
+      - task: shared:bootstrap-ctp
+      - task: shared:bootstrap-configurations
+      - task: shared:bootstrap-provider-kubernetes-with-pat
+      - task: shared:bootstrap-argocd-application
+      # self-hosted-space without proidc
+      - task: shared:bootstrap-aws-credentials
+      - task: shared:post-bootstrap
