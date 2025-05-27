@@ -112,3 +112,6 @@ spec:
           sourceRef:
             name: aws-creds
             namespace: crossplane-system
+      teamWithRobot:
+        teamNameOverride: CI
+        teamExternalName: ae0e38df-fd52-4724-9c98-b8cd455d3d38
