@@ -64,6 +64,13 @@ spec:
             - group: "pkg.crossplane.io"
               apiVersion: "v1"
               plural: "providers"
+    secretSync:
+      - destRef:
+          name: up-secret
+          namespace: backstage
+        sourceRef:
+          name: solution-idp-non-prod-frontend-robot-token
+          namespace: crossplane-system
     infrastructure:
       ingressNginx:
         enabled: true
