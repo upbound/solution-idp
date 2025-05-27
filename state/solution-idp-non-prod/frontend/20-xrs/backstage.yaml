@@ -16,10 +16,37 @@ spec:
     image:
       registry: docker.io
       repository: haarchri/solution-idp_backstage
-      tag: v0.1.0
+      tag: v0.1.1
     config:
       app:
         title: "solution-idp"
+      kubernetes:
+        frontend:
+          podDelete:
+            enabled: true
+        skipMetricsLookup: true
+        serviceLocatorMethod:
+          type: "multiTenant"
+        auth:
+          providers:
+            upbound: {}
+        clusterLocatorMethods:
+          - type: "config"
+            clusters:
+              - url: "https://proxy.upbound-34.168.72.36.nip.io/apis/spaces.upbound.io/v1beta1/namespaces/solution-idp-non-prod-frontend/controlplanes/frontend/k8s"
+                name: "solution-idp-non-prod-frontend-frontend"
+                authProvider: "upbound"
+                skipMetricsLookup: true
+                skipTLSVerify: true
+                caData: '${UP_CTP_CA_DATA}'
+                authMetadata:
+                  'upbound.io/organization': "upbound"
+                  'upbound.io/token': '${UP_ROBOT_TOKEN}'
+        objectTypes:
+          - configmaps
+          - deployments
+          - pods
+          - services
       kubernetesIngestor:
         mappings:
           systemModel: "cluster-namespace"
