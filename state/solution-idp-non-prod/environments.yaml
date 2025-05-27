@@ -113,8 +113,8 @@ spec:
             name: aws-creds
             namespace: crossplane-system
         - destRef:
-            name: up-secret
-            namespace: backstage
+            name: solution-idp-non-prod-frontend-robot-token
+            namespace: crossplane-system
           sourceRef:
             name: solution-idp-non-prod-frontend-robot-token
             namespace: default
