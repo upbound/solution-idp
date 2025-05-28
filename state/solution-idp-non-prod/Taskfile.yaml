@@ -5,12 +5,12 @@ includes:
 
 vars:
   AWS_CREDENTIALS_PATH: "/Users/haarchri/.aws/aws.json"
-  UPBOUND_ORG: "upbound"
+  UPBOUND_ORG: "upbound-demo"
   UPBOUND_ORG_TEAM: "CI"
-  SPACE: "space-the-final-frontier"
+  SPACE: "gartner-idp"
   ROOT_GROUP_NAME: "solution-idp-non-prod"
   ROOT_CTP_NAME: "bootstrap"
-  GIT_REPO: "https://github.com/upbound/solution-idp.git"
+  GIT_REPO: "https://github.com/upbound-demo/solution-idp.git"
   GIT_REVISION: "main"
 
 tasks:
