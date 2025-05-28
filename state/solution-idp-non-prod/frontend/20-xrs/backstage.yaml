@@ -33,7 +33,7 @@ spec:
         clusterLocatorMethods:
           - type: "config"
             clusters:
-              - url: "https://javid-labs.upbound-35.162.105.208.nip.io/apis/spaces.upbound.io/v1beta1/namespaces/solution-idp-non-prod-frontend/controlplanes/frontend/k8s"
+              - url: "https://javid-labs.upbound-35.165.10.77.nip.io/apis/spaces.upbound.io/v1beta1/namespaces/solution-idp-non-prod-frontend/controlplanes/frontend/k8s"
                 name: "solution-idp-non-prod-frontend-frontend"
                 authProvider: "upbound"
                 skipMetricsLookup: true
