@@ -30,4 +30,4 @@ spec:
             namespace: default
       teamWithRobot:
         teamNameOverride: CI
-        teamExternalName: ae0e38df-fd52-4724-9c98-b8cd455d3d38
+        teamExternalName: ce82c4a5-ac65-49fb-9186-b7f2d0938f78
