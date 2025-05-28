@@ -9,7 +9,7 @@ spec:
     providerConfigName: "default"
     ingress:
       enabled: true
-      host: "backstage-solution-idp.upboundrocks.cloud"
+      host: "backstage-solution-idp-upbound-demo.upboundrocks.cloud"
       clusterIssuer: "letsencrypt-prod"
       className: "nginx"
     replicas: 3
@@ -33,7 +33,7 @@ spec:
         clusterLocatorMethods:
           - type: "config"
             clusters:
-              - url: "https://proxy.upbound-34.168.72.36.nip.io/apis/spaces.upbound.io/v1beta1/namespaces/solution-idp-non-prod-frontend/controlplanes/frontend/k8s"
+              - url: "https://javid-labs.upbound-35.162.105.208.nip.io/apis/spaces.upbound.io/v1beta1/namespaces/solution-idp-non-prod-frontend/controlplanes/frontend/k8s"
                 name: "solution-idp-non-prod-frontend-frontend"
                 authProvider: "upbound"
                 skipMetricsLookup: true
