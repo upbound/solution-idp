@@ -6,7 +6,7 @@ metadata:
 spec:
   generators:
     - git:
-        repoURL: https://github.com/upbound/solution-idp.git
+        repoURL: https://github.com/upbound-demo/solution-idp.git
         revision: main
         directories:
           - path: state/solution-idp-non-prod/*
@@ -16,7 +16,7 @@ spec:
     spec:
       project: default
       source:
-        repoURL: https://github.com/upbound/solution-idp.git
+        repoURL: https://github.com/upbound-demo/solution-idp.git
         targetRevision: main
         path: '{{path}}'
       destination:
@@ -35,7 +35,7 @@ metadata:
 spec:
   generators:
     - git:
-        repoURL: https://github.com/upbound/solution-idp.git
+        repoURL: https://github.com/upbound-demo/solution-idp.git
         revision: main
         directories:
           - path: state/solution-idp-non-prod/*/*
@@ -47,7 +47,7 @@ spec:
     spec:
       project: default
       source:
-        repoURL: https://github.com/upbound/solution-idp.git
+        repoURL: https://github.com/upbound-demo/solution-idp.git
         targetRevision: main
         path: '{{path}}'
       destination:
