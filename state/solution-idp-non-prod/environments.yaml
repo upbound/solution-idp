@@ -14,7 +14,7 @@ spec:
       initKubeconfigSecretRef:
         name: bootstrap-ctp-kubeconfig
       tokenSecretRef:
-        name: solution-idp-non-prod-bootstrap-token
+        name: upbound-demo-solution-idp-non-prod-bootstrap-token
       secretSync:
         - destRef:
             name: aws-creds
