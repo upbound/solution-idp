@@ -77,7 +77,7 @@ tasks:
     internal: true
     desc: Configure Personal Access Token in Kubernetes Secret
     vars:
-      TOKEN_SECRET_NAME: '{{.TOKEN_SECRET_NAME | default (printf "%s-%s-token" .ROOT_GROUP_NAME .ROOT_CTP_NAME)}}'
+      TOKEN_SECRET_NAME: '{{.TOKEN_SECRET_NAME | default (printf "%s-%s-%s-token" .UPBOUND_ORG .ROOT_GROUP_NAME .ROOT_CTP_NAME)}}'
     deps:
       - task: up-ctx-ctp
     cmds:
@@ -138,7 +138,7 @@ tasks:
     internal: true
     desc: Configure provider-kubernetes providerconfig and secrets with up ctx kubeconfig.
     vars:
-      TOKEN_SECRET_NAME: '{{.TOKEN_SECRET_NAME | default (printf "%s-%s-token" .ROOT_GROUP_NAME .ROOT_CTP_NAME)}}'
+      TOKEN_SECRET_NAME: '{{.TOKEN_SECRET_NAME | default (printf "%s-%s-%s-token" .UPBOUND_ORG .ROOT_GROUP_NAME .ROOT_CTP_NAME)}}'
       KUBECONFIG_SECRET_NAME: '{{.KUBECONFIG_SECRET_NAME | default (printf "%s-ctp-kubeconfig" .ROOT_CTP_NAME)}}'
       PROVIDERCONFIG_NAME: '{{.PROVIDERCONFIG_NAME | default (printf "%s-ctp" .ROOT_CTP_NAME)}}'
       KUBECONFIG_SPACE: '{{.KUBECONFIG_SPACE | default .SPACE }}'
