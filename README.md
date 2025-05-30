@@ -31,12 +31,13 @@ An Internal Developer Platform (IDP) is a self-service platform that sits on top
 
 A centralized management layer that enables the orchestration of cloud resources and services across multiple providers.
 
-≈ Why Control Planes for IDPs?
+# Why Control Planes for IDPs?
 
 Control planes are an ideal foundation for IDPs because they provide:
 
 * **Centralized Management**: A single point of control for infrastructure across multiple clouds and services
 * **Declarative APIs**: Abstract complex infrastructure into simple, consistent interfaces that developers can easily consume
+* **Reconciliation**: Continuously monitors and automatically aligns actual infrastructure state with desired state
 
 ___ 
 # This repository:
