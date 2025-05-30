@@ -31,7 +31,7 @@ An Internal Developer Platform (IDP) is a self-service platform that sits on top
 
 A centralized management layer that enables the orchestration of cloud resources and services across multiple providers.
 
-# Why Control Planes for IDPs?
+≈ Why Control Planes for IDPs?
 
 Control planes are an ideal foundation for IDPs because they provide:
 
@@ -39,13 +39,13 @@ Control planes are an ideal foundation for IDPs because they provide:
 * **Declarative APIs**: Abstract complex infrastructure into simple, consistent interfaces that developers can easily consume
 
 ___ 
-This repository:
+# This repository:
 
 * Kickstarts a complete GitOps workflow for the **solution-idp** platform using Upbound
-* It provisions control planes, deploys ArgoCD and Backstage
+* It provisions control planes, deploys [ArgoCD](https://argoproj.github.io/cd/) and [Backstage](https://backstage.io/)
 * It sets up syncing for environment manifests located under the `state/` directory
 
-Key features powered by the **Upbound `up` CLI**:
+# Core capabilities enabled through the **Upbound `up` CLI**:
 
 * Create and configure Control Planes (CTPs) within a designated organization
   and space
@@ -73,7 +73,7 @@ Before you start, make sure you have:
 * [An Upbound Account](https://www.upbound.io/register/a)
 * Access to an Upbound Space and Organization
 * AWS credentials stored at `/Users/$USER/.aws/aws.json` (customizable in
-  Taskfile)
+  `Taskfile.yaml`)
 
 ---
 
@@ -96,8 +96,6 @@ brew install go-task/tap/go-task
 ```
 
 ### 3. Bootstrap your environment
-
-
 
 The `bootstrap-all` process will:
 
