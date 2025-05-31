@@ -14,8 +14,8 @@ spec:
       className: "nginx"
     replicas: 3
     image:
-      registry: docker.io
-      repository: haarchri/solution-idp_backstage
+      registry: xpkg.upbound.io
+      repository: upbound/backstage
       tag: v0.2.0
     config:
       app:
