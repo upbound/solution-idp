@@ -3,4 +3,4 @@ kind: Configuration
 metadata:
   name: upbound-configuration-backstage
 spec:
-  package: xpkg.upbound.io/upbound/configuration-backstage:v0.0.0-1748595353
+  package: xpkg.upbound.io/upbound/configuration-backstage:v0.1.0
