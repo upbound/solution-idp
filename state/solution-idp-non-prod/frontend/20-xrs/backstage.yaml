@@ -20,6 +20,8 @@ spec:
     config:
       app:
         title: "solution-idp"
+      organization:
+        name: "upbound"
       kubernetes:
         frontend:
           podDelete:
