@@ -16,7 +16,7 @@ spec:
     image:
       registry: docker.io
       repository: haarchri/solution-idp_backstage
-      tag: v0.4.0
+      tag: v0.4.1
     config:
       app:
         title: "solution-idp"
