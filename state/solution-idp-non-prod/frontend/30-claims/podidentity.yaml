@@ -1,0 +1,50 @@
+apiVersion: aws.platform.upbound.io/v1alpha1
+kind: PodIdentity
+metadata:
+  annotations:
+    backstage.io/links: |
+      [
+        {
+          "url": "https://docs.upbound.io/",
+          "title": "Upbound Docs",
+          "icon": "dashboard"
+        },
+        {
+          "url": "https://docs.crossplane.io/",
+          "title": "Crossplane Docs",
+          "icon": "docs"
+        }
+      ]
+    backstage.io/source-location: url:https://github.com/upbound/solution-idp
+    backstage.io/techdocs-ref: url:https://github.com/upbound/solution-idp
+  name: configuration-aws-eks-pod-identity
+  namespace: upbound-system
+spec:
+  parameters:
+    clusterNameSelector:
+      matchLabels:
+        crossplane.io/composite: solution-idp
+    deletionPolicy: Delete
+    inlinePolicy:
+    - name: default
+      policy: |
+        {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Action": [
+                        "kms:Decrypt",
+                        "kms:DescribeKey"
+                    ],
+                    "Effect": "Allow",
+                    "Resource": "*"
+                }
+            ]
+        }
+    managedPolicyArns:
+    - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+    providerConfigName: default
+    region: us-west-2
+    serviceAccount:
+      name: my-controller
+      namespace: kube-system
