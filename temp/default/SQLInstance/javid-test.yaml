@@ -1,0 +1,27 @@
+apiVersion: platform.upbound.io/v1alpha1
+kind: SQLInstance
+metadata:
+  annotations:
+    terasky.backstage.io/source-info: >-
+      {"pushToGit":true,"gitBranch":"main","gitRepo":"github.com?owner=upbound&repo=solution-idp","basePath":"temp/default/SQLInstance"}
+    terasky.backstage.io/add-to-catalog: 'true'
+    terasky.backstage.io/owner: group:default/javid
+    terasky.backstage.io/system: default
+    terasky.backstage.io/source-file-url: >-
+      https://github.com/upbound/solution-idp/blob/main/temp/default/SQLInstance/javid-test.yaml
+  name: javid-test
+  namespace: default
+spec:
+  parameters:
+    passwordSecretRef:
+      key: test
+      name: test
+      namespace: default
+    cloud: Azure
+    deletionPolicy: Delete
+    engine: mariadb
+    engineVersion: '10.3'
+    providerConfigName: default
+    region: uswest
+    storageGB: 5
+  compositeDeletePolicy: Background
