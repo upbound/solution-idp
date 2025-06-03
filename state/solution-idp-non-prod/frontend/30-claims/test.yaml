@@ -1,0 +1,22 @@
+apiVersion: aws.platform.upbound.io/v1alpha1
+kind: PodIdentity
+metadata:
+  annotations:
+    terasky.backstage.io/source-info: >-
+      {"pushToGit":true,"gitBranch":"main","gitRepo":"github.com?owner=upbound&repo=solution-idp","gitLayout":"custom","basePath":"state/solution-idp-non-prod/frontend/30-claims"}
+    terasky.backstage.io/add-to-catalog: 'true'
+    terasky.backstage.io/owner: group:default/test
+    terasky.backstage.io/system: default
+    terasky.backstage.io/source-file-url: >-
+      https://github.com/upbound/solution-idp/blob/main/state/solution-idp-non-prod/frontend/30-claims/test.yaml
+  name: test
+  namespace: default
+spec:
+  parameters:
+    serviceAccount:
+      name: test
+      namespace: test
+    clusterNameRef:
+      name: test
+    clusterName: test
+  compositeDeletePolicy: Background
