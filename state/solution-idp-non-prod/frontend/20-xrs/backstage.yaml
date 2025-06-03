@@ -71,6 +71,9 @@ spec:
             - group: "pkg.crossplane.io"
               apiVersion: "v1"
               plural: "providers"
+            - group: "platform.upbound.io"
+              apiVersion: "v1alpha1"
+              plural: "xsqlinstances"
         crossplane:
           xrds:
             publishPhase:
