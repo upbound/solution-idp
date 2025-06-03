@@ -22,6 +22,10 @@ spec:
         title: "solution-idp"
       organization:
         name: "upbound"
+      integrations:
+        github:
+          - host: github.com
+            token: '${GITHUB_TOKEN}'
       kubernetes:
         frontend:
           podDelete:
@@ -70,7 +74,7 @@ spec:
         crossplane:
           xrds:
             publishPhase:
-              allowRepoSelection: true
+              allowRepoSelection: false
               allowedTargets:
                 - github.com
               target: github
