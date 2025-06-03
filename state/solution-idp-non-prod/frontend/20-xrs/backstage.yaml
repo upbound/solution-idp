@@ -67,6 +67,16 @@ spec:
             - group: "pkg.crossplane.io"
               apiVersion: "v1"
               plural: "providers"
+        crossplane:
+          xrds:
+            publishPhase:
+              allowRepoSelection: true
+              allowedTargets:
+                - github.com
+              target: github
+              git:
+                repoUrl: github.com?owner=upbound&repo=solution-idp
+                targetBranch: main
     secretSync:
       - destRef:
           name: up-secret
