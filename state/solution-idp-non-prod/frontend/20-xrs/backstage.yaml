@@ -45,7 +45,7 @@ spec:
                 skipMetricsLookup: true
                 skipTLSVerify: true
                 authMetadata:
-                  'upbound.io/organization': "upbound"
+                  'upbound.io/organization': "upbound-demo"
                   'upbound.io/token': '${UP_ROBOT_TOKEN}'
         objectTypes:
           - configmaps
