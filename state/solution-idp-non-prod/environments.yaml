@@ -1,75 +1,75 @@
-apiVersion: sa.upbound.io/v1
-kind: XEnvironment
-metadata:
-  name: ai
-spec:
-  parameters:
-    aws:
-      accountId: "218131738736"
-      region: us-west-2
-      credsSecretRef:
-        name: aws-creds
-        namespace: crossplane-system
-    upbound:
-      initKubeconfigSecretRef:
-        name: bootstrap-ctp-kubeconfig
-      tokenSecretRef:
-        name: solution-idp-non-prod-bootstrap-token
----
-apiVersion: sa.upbound.io/v1
-kind: XEnvironment
-metadata:
-  name: compute
-spec:
-  parameters:
-    aws:
-      accountId: "218131738736"
-      region: us-west-2
-      credsSecretRef:
-        name: aws-creds
-        namespace: crossplane-system
-    upbound:
-      initKubeconfigSecretRef:
-        name: bootstrap-ctp-kubeconfig
-      tokenSecretRef:
-        name: solution-idp-non-prod-bootstrap-token
----
-apiVersion: sa.upbound.io/v1
-kind: XEnvironment
-metadata:
-  name: db
-spec:
-  parameters:
-    aws:
-      accountId: "218131738736"
-      region: us-west-2
-      credsSecretRef:
-        name: aws-creds
-        namespace: crossplane-system
-    upbound:
-      initKubeconfigSecretRef:
-        name: bootstrap-ctp-kubeconfig
-      tokenSecretRef:
-        name: solution-idp-non-prod-bootstrap-token
----
-apiVersion: sa.upbound.io/v1
-kind: XEnvironment
-metadata:
-  name: iam
-spec:
-  parameters:
-    aws:
-      accountId: "218131738736"
-      region: us-west-2
-      credsSecretRef:
-        name: aws-creds
-        namespace: crossplane-system
-    upbound:
-      initKubeconfigSecretRef:
-        name: bootstrap-ctp-kubeconfig
-      tokenSecretRef:
-        name: solution-idp-non-prod-bootstrap-token
----
+# apiVersion: sa.upbound.io/v1
+# kind: XEnvironment
+# metadata:
+#   name: ai
+# spec:
+#   parameters:
+#     aws:
+#       accountId: "218131738736"
+#       region: us-west-2
+#       credsSecretRef:
+#         name: aws-creds
+#         namespace: crossplane-system
+#     upbound:
+#       initKubeconfigSecretRef:
+#         name: bootstrap-ctp-kubeconfig
+#       tokenSecretRef:
+#         name: solution-idp-non-prod-bootstrap-token
+# ---
+# apiVersion: sa.upbound.io/v1
+# kind: XEnvironment
+# metadata:
+#   name: compute
+# spec:
+#   parameters:
+#     aws:
+#       accountId: "218131738736"
+#       region: us-west-2
+#       credsSecretRef:
+#         name: aws-creds
+#         namespace: crossplane-system
+#     upbound:
+#       initKubeconfigSecretRef:
+#         name: bootstrap-ctp-kubeconfig
+#       tokenSecretRef:
+#         name: solution-idp-non-prod-bootstrap-token
+# ---
+# apiVersion: sa.upbound.io/v1
+# kind: XEnvironment
+# metadata:
+#   name: db
+# spec:
+#   parameters:
+#     aws:
+#       accountId: "218131738736"
+#       region: us-west-2
+#       credsSecretRef:
+#         name: aws-creds
+#         namespace: crossplane-system
+#     upbound:
+#       initKubeconfigSecretRef:
+#         name: bootstrap-ctp-kubeconfig
+#       tokenSecretRef:
+#         name: solution-idp-non-prod-bootstrap-token
+# ---
+# apiVersion: sa.upbound.io/v1
+# kind: XEnvironment
+# metadata:
+#   name: iam
+# spec:
+#   parameters:
+#     aws:
+#       accountId: "218131738736"
+#       region: us-west-2
+#       credsSecretRef:
+#         name: aws-creds
+#         namespace: crossplane-system
+#     upbound:
+#       initKubeconfigSecretRef:
+#         name: bootstrap-ctp-kubeconfig
+#       tokenSecretRef:
+#         name: solution-idp-non-prod-bootstrap-token
+# ---
 apiVersion: sa.upbound.io/v1
 kind: XEnvironment
 metadata:
