@@ -6,7 +6,7 @@ spec:
   parameters:
     aws:
       accountId: "123456789101"
-      region: us-east-1
+      region: us-west-2
       providerRole:
         oidcProviderArn: "arn:aws:iam::123456789101:oidc-provider/proidc.upbound.io"
       roleArn: "arn:aws:iam::123456789101:role/my-role"

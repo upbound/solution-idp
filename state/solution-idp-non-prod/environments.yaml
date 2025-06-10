@@ -5,8 +5,8 @@ metadata:
 spec:
   parameters:
     aws:
-      accountId: "609897127049"
-      region: eu-central-1
+      accountId: "218131738736"
+      region: us-west-2
       credsSecretRef:
         name: aws-creds
         namespace: crossplane-system
@@ -23,8 +23,8 @@ metadata:
 spec:
   parameters:
     aws:
-      accountId: "609897127049"
-      region: eu-central-1
+      accountId: "218131738736"
+      region: us-west-2
       credsSecretRef:
         name: aws-creds
         namespace: crossplane-system
@@ -41,8 +41,8 @@ metadata:
 spec:
   parameters:
     aws:
-      accountId: "609897127049"
-      region: eu-central-1
+      accountId: "218131738736"
+      region: us-west-2
       credsSecretRef:
         name: aws-creds
         namespace: crossplane-system
@@ -59,8 +59,8 @@ metadata:
 spec:
   parameters:
     aws:
-      accountId: "609897127049"
-      region: eu-central-1
+      accountId: "218131738736"
+      region: us-west-2
       credsSecretRef:
         name: aws-creds
         namespace: crossplane-system
@@ -77,8 +77,8 @@ metadata:
 spec:
   parameters:
     aws:
-      accountId: "609897127049"
-      region: eu-central-1
+      accountId: "218131738736"
+      region: us-west-2
       credsSecretRef:
         name: aws-creds
         namespace: crossplane-system
@@ -95,8 +95,8 @@ metadata:
 spec:
   parameters:
     aws:
-      accountId: "609897127049"
-      region: eu-central-1
+      accountId: "218131738736"
+      region: us-west-2
       credsSecretRef:
         name: aws-creds
         namespace: crossplane-system

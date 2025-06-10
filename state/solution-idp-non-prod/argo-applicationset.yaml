@@ -7,7 +7,7 @@ spec:
   generators:
     - git:
         repoURL: https://github.com/upbound/solution-idp.git
-        revision: main
+        revision: javid-labs
         directories:
           - path: state/solution-idp-non-prod/*
   template:
@@ -17,7 +17,7 @@ spec:
       project: default
       source:
         repoURL: https://github.com/upbound/solution-idp.git
-        targetRevision: main
+        targetRevision: javid-labs
         path: '{{path}}'
       destination:
         name: 'solution-idp-non-prod-{{path.basename}}-{{path.basename}}'
@@ -36,7 +36,7 @@ spec:
   generators:
     - git:
         repoURL: https://github.com/upbound/solution-idp.git
-        revision: main
+        revision: javid-labs
         directories:
           - path: state/solution-idp-non-prod/*/*
   template:
@@ -48,7 +48,7 @@ spec:
       project: default
       source:
         repoURL: https://github.com/upbound/solution-idp.git
-        targetRevision: main
+        targetRevision: javid-labs
         path: '{{path}}'
       destination:
         name: 'solution-idp-non-prod-{{path[2]}}-{{path[2]}}'
