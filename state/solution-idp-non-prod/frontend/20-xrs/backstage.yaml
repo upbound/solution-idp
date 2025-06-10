@@ -83,7 +83,7 @@ spec:
               target: github
               git:
                 repoUrl: github.com?owner=upbound&repo=solution-idp
-                targetBranch: main
+                targetBranch: javid-labs
     secretSync:
       - destRef:
           name: up-secret
@@ -109,7 +109,7 @@ spec:
           authenticationMode: API
         iam:
           principalArn: arn:aws:iam::609897127049:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_AdministratorAccess_d703c73ed340fde7
-        version: "1.27"
+        version: "1.29"
         nodes:
-          count: 1
+          count: 3
           instanceType: "m4.2xlarge"
