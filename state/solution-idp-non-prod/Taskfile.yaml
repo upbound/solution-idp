@@ -4,14 +4,14 @@ includes:
   shared: ../Taskfile.yaml
 
 vars:
-  AWS_CREDENTIALS_PATH: "/Users/haarchri/.aws/aws.json"
-  UPBOUND_ORG: "upbound"
+  AWS_CREDENTIALS_PATH: "/home/jhabibi/development/spaces-demo/startup/startup-auto/aws-credentials-file.txt"
+  UPBOUND_ORG: "upbound-demo"
   UPBOUND_ORG_TEAM: "CI"
-  SPACE: "space-the-final-frontier"
+  SPACE: "idp-space"
   ROOT_GROUP_NAME: "solution-idp-non-prod"
   ROOT_CTP_NAME: "bootstrap"
   GIT_REPO: "https://github.com/upbound/solution-idp.git"
-  GIT_REVISION: "main"
+  GIT_REVISION: "javid-labs"
 
 tasks:
   bootstrap:
