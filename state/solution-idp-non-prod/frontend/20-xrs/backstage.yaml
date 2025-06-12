@@ -9,7 +9,7 @@ spec:
     providerConfigName: "default"
     ingress:
       enabled: true
-      host: "backstage-solution-idp.upboundrocks.cloud"
+      host: "backstage-solution-idp.upbound-labs.cloud"
       clusterIssuer: "letsencrypt-prod"
       className: "nginx"
     replicas: 3
