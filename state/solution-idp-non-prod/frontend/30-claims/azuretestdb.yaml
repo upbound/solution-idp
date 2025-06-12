@@ -1,0 +1,23 @@
+apiVersion: platform.upbound.io/v1alpha1
+kind: SQLInstance
+metadata:
+  annotations:
+    terasky.backstage.io/source-info: >-
+      {"pushToGit":true,"gitBranch":"javid-labs","gitRepo":"github.com?owner=upbound&repo=solution-idp","gitLayout":"custom","basePath":"state/solution-idp-non-prod/frontend/30-claims"}
+    terasky.backstage.io/add-to-catalog: 'true'
+    terasky.backstage.io/owner: group:default/javid
+    terasky.backstage.io/system: default
+    terasky.backstage.io/source-file-url: >-
+      https://github.com/upbound/solution-idp/blob/javid-labs/state/solution-idp-non-prod/frontend/30-claims/azuretestdb.yaml
+  name: azuretestdb
+  namespace: default
+spec:
+  parameters:
+    cloud: Azure
+    deletionPolicy: Delete
+    engine: postgres
+    engineVersion: '11'
+    providerConfigName: default
+    region: westus2
+    storageGB: 32
+  compositeDeletePolicy: Background
