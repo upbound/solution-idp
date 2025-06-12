@@ -3,4 +3,4 @@ kind: Configuration
 metadata:
   name: configuration-dbaas-backstage
 spec:
-  package: xpkg.upbound.io/upbound/gartner:v0.0.0-1749069127
+  package: xpkg.upbound.io/upbound/gartner:v0.0.0-1749709906
