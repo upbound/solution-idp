@@ -80,6 +80,14 @@ spec:
               apiVersion: "v1alpha1"
               singular: "XSQLInstance"
               plural: "xsqlinstances"
+            - group: "azure.platform.upbound.io"
+              apiVersion: "v1alpha1"
+              singular: "XSQLInstance"
+              plural: "xsqlinstances"
+            - group: "azure.platform.upbound.io"
+              apiVersion: "v1alpha1"
+              singular: "XNetwork"
+              plural: "xnetworks"
         crossplane:
           xrds:
             publishPhase:
