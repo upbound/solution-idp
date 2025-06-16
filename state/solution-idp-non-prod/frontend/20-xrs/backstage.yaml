@@ -63,6 +63,7 @@ spec:
               singular: "xeks"
             - group: "aws.platform.upbound.io"
               apiVersion: "v1alpha1"
+              singular: "XNetwork"
               plural: "xnetworks"
             - group: "aws.platform.upbound.io"
               apiVersion: "v1alpha1"
@@ -73,6 +74,11 @@ spec:
               plural: "providers"
             - group: "platform.upbound.io"
               apiVersion: "v1alpha1"
+              plural: "xsqlinstances"
+              singular: "XSQLInstance"
+            - group: "aws.platform.upbound.io"
+              apiVersion: "v1alpha1"
+              singular: "XSQLInstance"
               plural: "xsqlinstances"
         crossplane:
           xrds:
