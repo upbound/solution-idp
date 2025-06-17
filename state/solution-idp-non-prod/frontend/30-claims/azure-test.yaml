@@ -18,6 +18,6 @@ spec:
     engine: postgres
     engineVersion: '11'
     providerConfigName: default
-    region: uswest2
+    region: westus2
     storageGB: 32
   compositeDeletePolicy: Background
