@@ -16,7 +16,7 @@ spec:
     image:
       registry: xpkg.upbound.io
       repository: upbound/backstage
-      tag: v0.3.0
+      tag: v0.4.0
     config:
       app:
         title: "solution-idp"
