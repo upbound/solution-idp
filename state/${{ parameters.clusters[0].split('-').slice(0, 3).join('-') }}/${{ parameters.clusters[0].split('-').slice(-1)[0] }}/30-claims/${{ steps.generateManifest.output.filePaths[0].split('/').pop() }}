@@ -1,0 +1,20 @@
+apiVersion: aws.platform.upbound.io/v1alpha1
+kind: PodIdentity
+metadata:
+  annotations:
+    upbound.backstage.io/source-info: >-
+      {"pushToGit":true,"gitBranch":"javid-labs","gitRepo":"github.com?owner=upbound&repo=solution-idp","gitLayout":"namespace-scoped","basePath":"default"}
+    upbound.backstage.io/add-to-catalog: 'true'
+    upbound.backstage.io/owner: group:default/test
+    upbound.backstage.io/system: default
+    upbound.backstage.io/source-file-url: >-
+      https://github.com/upbound/solution-idp/blob/javid-labs/default/kyverno.yaml
+  name: kyverno
+  namespace: default
+spec:
+  parameters:
+    serviceAccount:
+      name: kyverno
+      namespace: kyverno
+    clusterName: test-cluster
+  compositeDeletePolicy: Background
