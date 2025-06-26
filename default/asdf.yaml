@@ -1,0 +1,21 @@
+apiVersion: platform.upbound.io/v1alpha1
+kind: SQLInstance
+metadata:
+  annotations:
+    upbound.backstage.io/source-info: >-
+      {"pushToGit":true,"gitBranch":"javid-labs","gitRepo":"github.com?owner=upbound&repo=solution-idp","gitLayout":"namespace-scoped","basePath":"default"}
+    upbound.backstage.io/add-to-catalog: 'true'
+    upbound.backstage.io/owner: group:default/javid
+    upbound.backstage.io/system: default
+    upbound.backstage.io/source-file-url: https://github.com/upbound/solution-idp/blob/javid-labs/default/asdf.yaml
+  name: asdf
+  namespace: default
+spec:
+  parameters:
+    cloud: AWS
+    deletionPolicy: Delete
+    engine: postgres
+    engineVersion: '13'
+    region: uswest2
+    storageGB: 32
+  compositeDeletePolicy: Background
