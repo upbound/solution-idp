@@ -48,6 +48,15 @@ spec:
                   'upbound.io/organization': "upbound-demo"
                   'upbound.io/token': '${UP_ROBOT_TOKEN}'
                 gitFilePathPattern: "state/solution-idp-non-prod/frontend/30-claims/$$Kind-$$Namespace-$$Name"
+              - url: "https://javid-labs.upbound-44.226.231.131.nip.io/apis/spaces.upbound.io/v1beta1/namespaces/solution-idp-non-prod-network/controlplanes/network/k8s"
+                name: "solution-idp-non-prod-network-network"
+                authProvider: "upbound"
+                skipMetricsLookup: true
+                skipTLSVerify: true
+                authMetadata:
+                  'upbound.io/organization': "upbound-demo"
+                  'upbound.io/token': '${UP_ROBOT_TOKEN}'
+                gitFilePathPattern: "state/solution-idp-non-prod/network/30-claims/$$Kind-$$Namespace-$$Name"
         objectTypes:
           - configmaps
           - deployments
