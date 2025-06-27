@@ -44,6 +44,7 @@ spec:
       name: 'solution-idp-non-prod-{{path[2]}}-{{path[3]}}'
       annotations:
         argocd.argoproj.io/sync-wave: '{{path[3]}}'
+        argocd.argoproj.io/sync-options: "timeout.reconciliation=10s"
     spec:
       project: default
       source:
