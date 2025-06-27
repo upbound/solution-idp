@@ -57,3 +57,36 @@ spec:
         automated:
           prune: true
           selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: claims
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - git:
+        repoURL: https://github.com/upbound/solution-idp.git
+        revision: javid-labs
+        directories:
+          - path: solution-idp-non-prod-frontend-frontend/*/*
+  template:
+    metadata:
+      name: 'solution-idp-non-prod-claims-{{index .path.segments 1 | slugify}}-{{index .path.segments 2 | slugify}}'
+      annotations:
+        argocd.argoproj.io/sync-wave: '30'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/upbound/solution-idp.git
+        targetRevision: javid-labs
+        path: '{{.path.path}}'
+      destination:
+        name: 'solution-idp-non-prod-frontend-frontend'
+        namespace: default
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true

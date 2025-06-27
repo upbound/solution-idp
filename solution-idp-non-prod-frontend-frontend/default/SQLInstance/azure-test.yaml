@@ -8,8 +8,8 @@ metadata:
     upbound.backstage.io/owner: group:default/javid
     upbound.backstage.io/system: default
     upbound.backstage.io/source-file-url: >-
-      https://github.com/upbound/solution-idp/blob/javid-labs/solution-idp-non-prod-frontend-frontend/default/SQLInstance/argo-test.yaml
-  name: argo-test
+      https://github.com/upbound/solution-idp/blob/javid-labs/solution-idp-non-prod-frontend-frontend/default/SQLInstance/azure-test.yaml
+  name: azure-test
   namespace: default
 spec:
   parameters:
