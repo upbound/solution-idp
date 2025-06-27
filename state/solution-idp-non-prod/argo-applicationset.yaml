@@ -77,6 +77,7 @@ spec:
       name: 'solution-idp-non-prod-claims-{{index .path.segments 1 | slugify}}-{{index .path.segments 2 | slugify}}'
       annotations:
         argocd.argoproj.io/sync-wave: '30'
+        argocd.argoproj.io/sync-options: "timeout.reconciliation=10s"
     spec:
       project: default
       source:
