@@ -1,0 +1,19 @@
+apiVersion: platform.upbound.io/v1alpha1
+kind: SQLInstance
+metadata:
+  annotations:
+    upbound.backstage.io/source-info: >-
+      {"pushToGit":true,"gitBranch":"javid-labs","gitRepo":"github.com?owner=upbound&repo=solution-idp","basePath":"solution-idp-non-prod-frontend-frontend/haar/SQLInstance"}
+    upbound.backstage.io/add-to-catalog: 'true'
+    upbound.backstage.io/owner: group:default/test
+    upbound.backstage.io/system: haar
+    upbound.backstage.io/source-file-url: >-
+      https://github.com/upbound/solution-idp/blob/javid-labs/state/solution-idp-non-prod/frontend/30-claims/haar-SQLInstance-chris.yaml
+  name: chris
+  namespace: haar
+spec:
+  parameters:
+    cloud: AWS
+    engine: mariadb
+    engineVersion: '1.13'
+  compositeDeletePolicy: Background
