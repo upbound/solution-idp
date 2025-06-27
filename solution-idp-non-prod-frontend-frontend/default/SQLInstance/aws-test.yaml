@@ -2,6 +2,26 @@ apiVersion: platform.upbound.io/v1alpha1
 kind: SQLInstance
 metadata:
   annotations:
+    backstage.io/links: |
+      [
+        {
+          "url": "https://docs.upbound.io/",
+          "title": "Upbound Docs",
+          "icon": "dashboard"
+        },
+        {
+          "url": "https://marketplace.upbound.io/",
+          "title": "Upbound Marketplace",
+          "icon": "catalog"
+        },
+        {
+          "url": "https://docs.crossplane.io/",
+          "title": "Crossplane Docs",
+          "icon": "docs"
+        }
+      ]
+    backstage.io/source-location: url:https://github.com/upbound/configuration-dbaas
+    backstage.io/techdocs-ref: url:https://github.com/upbound/configuration-dbaas
     upbound.backstage.io/source-info: >-
       {"pushToGit":true,"gitBranch":"javid-labs","gitRepo":"github.com?owner=upbound&repo=solution-idp","gitLayout":"cluster-scoped","basePath":"solution-idp-non-prod-frontend-frontend/default/SQLInstance"}
     upbound.backstage.io/add-to-catalog: 'true'
