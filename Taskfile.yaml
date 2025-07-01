@@ -2,7 +2,6 @@ version: '3'
 
 includes:
   solution-idp-non-prod: state/solution-idp-non-prod/Taskfile.yaml
-  # solution-idp-prod: state/solution-idp-prod/Taskfile.yaml
 
 vars:
   GITOPS_STATE_FOLDER: "state"
@@ -49,4 +48,3 @@ tasks:
     deps: [check-up]
     cmds:
       - task: solution-idp-non-prod:bootstrap
-      # - task: solution-idp-prod:bootstrap

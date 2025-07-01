@@ -16,7 +16,7 @@ spec:
     image:
       registry: xpkg.upbound.io
       repository: upbound/backstage
-      tag: v0.3.0
+      tag: v0.6.0
     config:
       app:
         title: "solution-idp"
@@ -47,6 +47,7 @@ spec:
                 authMetadata:
                   'upbound.io/organization': "upbound"
                   'upbound.io/token': '${UP_ROBOT_TOKEN}'
+                gitFilePathPattern: "state/solution-idp-non-prod/frontend/30-claims/$$Kind-$$Namespace-$$Name"
         objectTypes:
           - configmaps
           - deployments
@@ -63,17 +64,28 @@ spec:
               singular: "xeks"
             - group: "aws.platform.upbound.io"
               apiVersion: "v1alpha1"
+              singular: "xnetwork"
               plural: "xnetworks"
             - group: "aws.platform.upbound.io"
               apiVersion: "v1alpha1"
               plural: "xpodidentities"
               singular: "xpodidentity"
-            - group: "pkg.crossplane.io"
-              apiVersion: "v1"
-              plural: "providers"
             - group: "platform.upbound.io"
               apiVersion: "v1alpha1"
               plural: "xsqlinstances"
+              singular: "XSQLInstance"
+            - group: "aws.platform.upbound.io"
+              apiVersion: "v1alpha1"
+              singular: "XSQLInstance"
+              plural: "xsqlinstances"
+            - group: "azure.platform.upbound.io"
+              apiVersion: "v1alpha1"
+              singular: "XSQLInstance"
+              plural: "xsqlinstances"
+            - group: "azure.platform.upbound.io"
+              apiVersion: "v1alpha1"
+              singular: "XNetwork"
+              plural: "xnetworks"
         crossplane:
           xrds:
             publishPhase:
@@ -109,7 +121,7 @@ spec:
           authenticationMode: API
         iam:
           principalArn: arn:aws:iam::609897127049:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_AdministratorAccess_d703c73ed340fde7
-        version: "1.27"
+        version: "1.29"
         nodes:
           count: 1
           instanceType: "m4.2xlarge"

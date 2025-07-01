@@ -59,7 +59,6 @@ ___
 This solution has two available demo setups:
 
 * `solution-idp-non-prod`
-* `solution-idp-prod`
 
 ---
 
@@ -136,8 +135,7 @@ Each subfolder represents a separate Upbound Control Plane / Group and may inclu
 .
 ├── _output/                   # Local Upbound CLI binary
 ├── state/                     # GitOps source of truth for environments
-│   ├── solution-idp-non-prod/
-│   └── solution-idp-prod/
+│   └── solution-idp-non-prod/
 ├── Taskfile.yaml              # Main task runner config
 └── README.md
 ```
