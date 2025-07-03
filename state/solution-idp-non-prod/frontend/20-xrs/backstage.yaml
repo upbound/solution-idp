@@ -123,7 +123,7 @@ spec:
           bootstrapClusterCreatorAdminPermissions: true
           authenticationMode: API
         iam:
-          principalArn: arn:aws:iam::218131738736:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_Half-Day-AdminAccess_18e70d328fb12ae0
+          principalArn: arn:aws:iam::218131738736:role/se-cluster-access
         version: "1.29"
         nodes:
           count: 3
