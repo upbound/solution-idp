@@ -23,12 +23,12 @@ metadata:
     backstage.io/source-location: url:https://github.com/upbound/configuration-dbaas
     backstage.io/techdocs-ref: url:https://github.com/upbound/configuration-dbaas
     upbound.backstage.io/source-info: >-
-      {"pushToGit":true,"gitBranch":"javid-labs","gitRepo":"github.com?owner=upbound&repo=solution-idp","gitLayout":"cluster-scoped","basePath":"solution-idp-non-prod-frontend-frontend/default/SQLInstance"}
+      {"pushToGit":true,"gitBranch":"javid-labs","gitRepo":"github.com?owner=upbound&repo=solution-idp","gitLayout":"cluster-scoped","basePath":"state/solution-idp-non-prod/frontend/30-claims"}
     upbound.backstage.io/add-to-catalog: 'true'
     upbound.backstage.io/owner: group:default/javid
     upbound.backstage.io/system: default
-    upbound.backstage.io/source-file-url: https://github.com/upbound/solution-idp/blob/javid-labs/solution-idp-non-prod-frontend-frontend/default/SQLInstance/aws-test.yaml
-  name: aws-test
+    upbound.backstage.io/source-file-url: https://github.com/upbound/solution-idp/blob/javid-labs/state/solution-idp-non-prod/frontend/30-claims/aws-demo.yaml
+  name: aws-demo
   namespace: default
 spec:
   parameters:
