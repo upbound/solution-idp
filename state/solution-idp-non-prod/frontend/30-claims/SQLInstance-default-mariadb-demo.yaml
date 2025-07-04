@@ -1,0 +1,23 @@
+apiVersion: platform.upbound.io/v1alpha1
+kind: SQLInstance
+metadata:
+  annotations:
+    upbound.backstage.io/source-info: >-
+      {"pushToGit":true,"gitBranch":"javid-labs","gitRepo":"github.com?owner=upbound&repo=solution-idp","basePath":"solution-idp-non-prod-frontend-frontend/default/SQLInstance"}
+    upbound.backstage.io/add-to-catalog: 'true'
+    upbound.backstage.io/owner: group:default/javid
+    upbound.backstage.io/system: default
+    upbound.backstage.io/source-file-url: >-
+      https://github.com/upbound/solution-idp/blob/javid-labs/state/solution-idp-non-prod/frontend/30-claims/SQLInstance-default-mariadb-demo.yaml
+  name: mariadb-demo
+  namespace: default
+spec:
+  parameters:
+    cloud: AWS
+    deletionPolicy: Delete
+    engine: mariadb
+    engineVersion: '10.11'
+    providerConfigName: default
+    region: us-west-2
+    storageGB: 5
+  compositeDeletePolicy: Background
