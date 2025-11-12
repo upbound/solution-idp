@@ -37,7 +37,7 @@ tasks:
     deps:
       - task: up-ctx-group
     cmds:
-      - up ctp get {{.ROOT_CTP_NAME}} || up ctp create {{.ROOT_CTP_NAME}} --crossplane-channel="Rapid"
+      - up ctp get {{.ROOT_CTP_NAME}} || up ctp create {{.ROOT_CTP_NAME}} --crossplane-channel="None" --crossplane-version="2.0.2-up.5"
       - |
           until [ "$(kubectl get ctp {{.ROOT_CTP_NAME}} -ojsonpath='{.status.message}')" == "Available" ]; do
             echo "Waiting for CTP {{.ROOT_CTP_NAME}} to be ready..."
@@ -56,7 +56,7 @@ tasks:
             CONFIGS=$(yq e 'select(.kind == "Configuration") | .metadata.name' "$CONFIGS_FILE" | tr '\n' ' ')
             kubectl wait configuration.pkg --all --for=condition=Healthy --timeout 10m
             kubectl wait configuration.pkg --all --for=condition=Installed --timeout 10m
-            kubectl wait configurationrevisions.pkg --all --for=condition=Healthy --timeout 10m
+            kubectl wait configurationrevisions.pkg --all --for=condition=RevisionHealthy --timeout 10m
             kubectl wait provider.pkg --all --for condition=Healthy --timeout 10m
             kubectl -n crossplane-system wait --for=condition=Available deployment --all --timeout=5m
             kubectl wait xrd --all --for condition=Established
