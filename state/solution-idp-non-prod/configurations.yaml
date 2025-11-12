@@ -3,7 +3,7 @@ kind: Configuration
 metadata:
   name: platform-ref-upbound
 spec:
-  package: xpkg.upbound.io/upbound/platform-ref-upbound:v0.5.0
+  package: xpkg.upbound.io/upbound/platform-ref-upbound:v0.7.0
 ---
 apiVersion: pkg.upbound.io/v1alpha1
 kind: Controller

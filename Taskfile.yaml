@@ -5,7 +5,7 @@ includes:
 
 vars:
   GITOPS_STATE_FOLDER: "state"
-  UP_VERSION: "v0.40.0"
+  UP_VERSION: "v0.42.0"
   UP_CHANNEL: "stable"
   UP_OUTPUT_DIR: "_output"
   UP_BINARY: "{{.UP_OUTPUT_DIR}}/up"
