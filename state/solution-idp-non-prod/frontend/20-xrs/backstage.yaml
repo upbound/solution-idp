@@ -85,7 +85,7 @@ spec:
             - group: "azure.platform.upbound.io"
               apiVersion: "v1alpha1"
               singular: "XNetwork"
-              plural: "xnetworks"          
+              plural: "xnetworks"
         crossplane:
           xrds:
             publishPhase:
