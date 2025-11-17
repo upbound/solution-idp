@@ -103,6 +103,12 @@ spec:
         sourceRef:
           name: solution-idp-non-prod-frontend-robot-token
           namespace: crossplane-system
+      - destRef:
+          name: github-token
+          namespace: backstage
+        sourceRef:
+          name: github-token
+          namespace: crossplane-system       
     infrastructure:
       network:
         vpcCidrBlock: "192.168.0.0/16"
