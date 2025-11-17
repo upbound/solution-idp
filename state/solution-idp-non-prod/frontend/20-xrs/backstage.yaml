@@ -5,7 +5,7 @@ metadata:
 spec:
   parameters:
     id: "solution-idp-non-prod-frontend"
-    region: "us-west-2"
+    region: "eu-west-1"
     providerConfigName: "default"
     ingress:
       enabled: true
@@ -95,7 +95,7 @@ spec:
               target: github
               git:
                 repoUrl: github.com?owner=upbound&repo=solution-idp
-                targetBranch: main
+                targetBranch: siva-labs
     secretSync:
       - destRef:
           name: up-secret
@@ -120,7 +120,7 @@ spec:
           bootstrapClusterCreatorAdminPermissions: true
           authenticationMode: API
         iam:
-          principalArn: arn:aws:iam::609897127049:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_AdministratorAccess_d703c73ed340fde7
+          principalArn: arn:aws:iam::218131738736:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_AdministratorAccess_d716fac1f978e42c
         version: "1.31"
         nodes:
           count: 1
