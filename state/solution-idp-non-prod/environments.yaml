@@ -28,4 +28,10 @@ spec:
           sourceRef:
             name: solution-idp-non-prod-frontend-robot-token
             namespace: default
+        - destRef:
+            name: github-token
+            namespace: crossplane-system
+          sourceRef:
+            name: github-token
+            namespace: crossplane-system            
       teamWithRobot: {}
