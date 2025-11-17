@@ -104,6 +104,21 @@ spec:
           name: solution-idp-non-prod-frontend-robot-token
           namespace: crossplane-system
     infrastructure:
+      network:
+        vpcCidrBlock: "192.168.0.0/16"
+        subnets:
+          - availabilityZone: eu-west-1a
+            cidrBlock: 192.168.0.0/18
+            type: public
+          - availabilityZone: eu-west-1b
+            cidrBlock: 192.168.64.0/18
+            type: public
+          - availabilityZone: eu-west-1a
+            cidrBlock: 192.168.128.0/18
+            type: private
+          - availabilityZone: eu-west-1b
+            cidrBlock: 192.168.192.0/18
+            type: private
       ingressNginx:
         enabled: true
       certManager:
