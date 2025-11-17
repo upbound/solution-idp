@@ -44,7 +44,7 @@ spec:
     managedPolicyArns:
     - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
     providerConfigName: default
-    region: us-west-2
+    region: eu-west-1
     serviceAccount:
       name: my-controller
       namespace: kube-system
