@@ -104,7 +104,7 @@ spec:
           name: solution-idp-non-prod-frontend-robot-token
           namespace: crossplane-system
       - destRef:
-          name: github-token
+          name: github-pat
           namespace: backstage
         sourceRef:
           name: github-token
