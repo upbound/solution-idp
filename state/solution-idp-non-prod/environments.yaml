@@ -5,8 +5,8 @@ metadata:
 spec:
   parameters:
     aws:
-      accountId: "609897127049"
-      region: eu-central-1
+      accountId: "222704912172"
+      region: eu-west-1
       credsSecretRef:
         name: aws-creds
         namespace: crossplane-system
