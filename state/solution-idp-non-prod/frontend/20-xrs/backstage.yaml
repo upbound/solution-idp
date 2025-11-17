@@ -127,15 +127,15 @@ spec:
         enabled: true
       externalDNS:
         enabled: true
-        # upboundrocks.cloud
-        route53ZoneId: "Z0115025YFQ7ZQF6BJ6N"
+        # backstage.upboundrocks.cloud
+        route53ZoneId: "Z0253751120CQFDRYJ42R"
       eks:
         enabled: true
         accessConfig:
           bootstrapClusterCreatorAdminPermissions: true
           authenticationMode: API
         iam:
-          principalArn: arn:aws:iam::218131738736:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_AdministratorAccess_d716fac1f978e42c
+          principalArn: arn:aws:iam::222704912172:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_AdministratorAccess_d716fac1f978e42c
         version: "1.31"
         nodes:
           count: 1
