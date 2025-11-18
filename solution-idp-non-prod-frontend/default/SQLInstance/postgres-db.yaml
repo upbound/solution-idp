@@ -1,0 +1,30 @@
+apiVersion: platform.upbound.io/v1alpha1
+kind: SQLInstance
+metadata:
+  annotations:
+    upbound.backstage.io/source-info: >-
+      {"pushToGit":true,"gitBranch":"siva-labs","gitRepo":"github.com?owner=upbound&repo=solution-idp","gitLayout":"cluster-scoped","basePath":"solution-idp-non-prod-frontend/default/SQLInstance"}
+    upbound.backstage.io/add-to-catalog: 'true'
+    upbound.backstage.io/owner: group:default/platform-engineer
+    upbound.backstage.io/system: default
+    upbound.backstage.io/source-file-url: >-
+      https://github.com/upbound/solution-idp/blob/siva-labs/solution-idp-non-prod-frontend/default/SQLInstance/postgres-db.yaml
+  name: postgres-db
+  namespace: default
+spec:
+  parameters:
+    cloud: AWS
+    deletionPolicy: Delete
+    engine: postgres
+    engineVersion: '16'
+    passwordSecretRef:
+      key: password
+      name: postgres-db
+      namespace: default
+    providerConfigName: default
+    region: eu-west-1
+    storageGB: 5
+  compositeDeletePolicy: Background
+  writeConnectionSecretToRef:
+    name: up-secret
+  compositionUpdatePolicy: Manual
