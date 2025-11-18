@@ -1,0 +1,25 @@
+apiVersion: azure.platform.upbound.io/v1alpha1
+kind: undefined
+metadata:
+  annotations:
+    upbound.backstage.io/source-info: >-
+      {"pushToGit":true,"gitBranch":"siva-labs","gitRepo":"github.com?owner=upbound&repo=solution-idp","gitLayout":"cluster-scoped","basePath":"solution-idp-non-prod-frontend/default/undefined"}
+    upbound.backstage.io/add-to-catalog: 'true'
+    upbound.backstage.io/owner: group:default/platform-team
+    upbound.backstage.io/system: default
+    upbound.backstage.io/source-file-url: >-
+      https://github.com/upbound/solution-idp/blob/siva-labs/solution-idp-non-prod-frontend/default/undefined/secured-network.yaml
+  name: secured-network
+  namespace: default
+spec:
+  parameters:
+    addressRange: 192.168.0.0/16
+    deletionPolicy: Delete
+    generalSubnetRange: 192.168.1.0/24
+    id: secured-network
+    providerConfigName: default
+    region: eu-west-1
+  compositeDeletePolicy: Background
+  writeConnectionSecretToRef:
+    name: up-secret
+  compositionUpdatePolicy: Automatic
