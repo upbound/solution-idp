@@ -39,13 +39,13 @@ spec:
         clusterLocatorMethods:
           - type: "config"
             clusters:
-              - url: "https://proxy.upbound-34.168.72.36.nip.io/apis/spaces.upbound.io/v1beta1/namespaces/solution-idp-non-prod-frontend/controlplanes/frontend/k8s"
+              - url: "https://a10ae5c926a314444b520910703eac6c-2144162346.us-east-2.elb.amazonaws.com/apis/spaces.upbound.io/v1beta1/namespaces/solution-idp-non-prod-frontend/controlplanes/frontend/k8s"
                 name: "solution-idp-non-prod-frontend-frontend"
                 authProvider: "upbound"
                 skipMetricsLookup: true
                 skipTLSVerify: true
                 authMetadata:
-                  'upbound.io/organization': "upbound"
+                  'upbound.io/organization': "solutions"
                   'upbound.io/token': '${UP_ROBOT_TOKEN}'
                 gitFilePathPattern: "state/solution-idp-non-prod/frontend/30-claims/$$Kind-$$Namespace-$$Name"
         objectTypes:
@@ -86,6 +86,10 @@ spec:
               apiVersion: "v1alpha1"
               singular: "XNetwork"
               plural: "xnetworks"
+            - group: "compositevirtualmachines.example.org"
+              apiVersion: "v1alpha1"
+              plural: "compositevirtualmachines"
+              singular: "CompositeVirtualMachine"
         crossplane:
           xrds:
             publishPhase:
