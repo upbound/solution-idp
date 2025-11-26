@@ -1,0 +1,22 @@
+apiVersion: azure.platform.upbound.io/v1
+kind: XStorageContainer
+metadata:
+  annotations:
+    upbound.backstage.io/source-info: >-
+      {"pushToGit":true,"gitBranch":"siva-labs","gitRepo":"github.com?owner=upbound&repo=solution-idp","gitLayout":"cluster-scoped","basePath":"azure-control-plane/default/XStorageContainer"}
+    upbound.backstage.io/add-to-catalog: 'true'
+    upbound.backstage.io/owner: group:default/platform-engineer
+    upbound.backstage.io/system: default
+    upbound.backstage.io/source-file-url: >-
+      https://github.com/upbound/solution-idp/blob/siva-labs/state/solution-idp-non-prod/frontend/30-claims/XStorageContainer-default-usage-and-charges-bucket.yaml
+  name: usage-and-charges-bucket
+  namespace: default
+spec:
+  parameters:
+    deletionPolicy: Delete
+    providerConfigName: default
+    region: eastus
+  compositeDeletePolicy: Background
+  writeConnectionSecretToRef:
+    name: up-secret
+  compositionUpdatePolicy: Automatic
