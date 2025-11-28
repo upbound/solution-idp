@@ -1,0 +1,30 @@
+apiVersion: dbaas.shell.com/v1alpha1
+kind: SQLInstance
+metadata:
+  annotations:
+    upbound.backstage.io/source-info: >-
+      {"pushToGit":true,"gitBranch":"siva-demo","gitRepo":"github.com?owner=upbound&repo=solution-idp","gitLayout":"cluster-scoped","basePath":"renewables-control-plane/default/SQLInstance"}
+    upbound.backstage.io/add-to-catalog: 'true'
+    upbound.backstage.io/owner: group:default/platform-engineer
+    upbound.backstage.io/system: default
+    upbound.backstage.io/source-file-url: >-
+      https://github.com/upbound/solution-idp/blob/siva-demo/state/solution-idp-non-prod/frontend/30-claims/renewables/production/SQLInstance-default-postgres-db.yaml
+  name: postgres-db
+  namespace: default
+spec:
+  parameters:
+    passwordSecretRef:
+      key: password
+      name: postgres-db
+      namespace: default
+    deletionPolicy: Delete
+    engine: postgres
+    engineVersion: '15'
+    provider: aws
+    providerConfigName: default
+    region: eu-west-1
+    storageGB: 10
+  compositeDeletePolicy: Background
+  writeConnectionSecretToRef:
+    name: up-secret
+  compositionUpdatePolicy: Automatic
