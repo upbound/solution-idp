@@ -16,7 +16,7 @@ spec:
     versioning: true
     acl: private
     provider: aws
-    region: us-east
+    region: us-west
   compositeDeletePolicy: Background
   writeConnectionSecretToRef:
     name: up-secret
