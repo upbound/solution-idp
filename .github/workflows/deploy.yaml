@@ -5,6 +5,10 @@ on:
     branches:
       - siva-demo
 
+env:
+  UP_API_TOKEN: ${{ secrets.UP_API_TOKEN }}
+  UP_ORG: ${{ secrets.UP_ORG }}
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -15,6 +19,13 @@ jobs:
       - name: Set up kubectl
         uses: azure/setup-kubectl@v4
 
+      - name: Install and login with up
+        if: env.UP_API_TOKEN != '' && env.UP_ORG != ''
+        uses: upbound/action-up@v1
+        with:
+          api-token: ${{ secrets.UP_API_TOKEN }}
+          organization: ${{ secrets.UP_ORG }}
+                    
       - name: Configure kubeconfig
         run: |
           mkdir -p $HOME/.kube
