@@ -1,4 +1,4 @@
-name: Deploy to k8s
+name: Deploy to Control-plane
 
 on:
   push:
@@ -29,11 +29,12 @@ jobs:
       - name: Set Upbound context
         run: up ctx upbound-demo/upbound-gcp-eu-west-3/integrated-gas/production
 
-      # - name: Configure kubeconfig
-      #   run: |
-      #     mkdir -p $HOME/.kube
-      #     echo "${{ secrets.KUBECONFIG_CONTENT }}" > $HOME/.kube/config
-
-      - name: Apply manifests
+      # Hard coded for demo-purpose.
+      - name: Apply manifests for integrated-gas-production
         run: |
-          kubectl apply -f state/solution-idp-non-prod/frontend/30-claims/
+          kubectl apply -f state/solution-idp-non-prod/frontend/30-claims/integrated-gas/production/
+
+      # Hard coded for demo-purpose.
+      - name: Apply manifests for renewable-energy-production
+        run: |
+          kubectl apply -f state/solution-idp-non-prod/frontend/30-claims/renewables/production/
