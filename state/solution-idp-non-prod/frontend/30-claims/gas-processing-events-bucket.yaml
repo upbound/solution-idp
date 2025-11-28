@@ -1,0 +1,12 @@
+apiVersion: platform.shell.com/v1alpha1
+kind: StorageBucket
+metadata:
+  name: gas-processing-events
+  namespace: default
+spec:
+  compositeDeletePolicy: Background
+  parameters:
+    acl: private
+    provider: aws
+    region: asia-east
+    versioning: true
