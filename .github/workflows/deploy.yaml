@@ -26,15 +26,26 @@ jobs:
           api-token: ${{ secrets.UP_API_TOKEN }}
           organization: ${{ secrets.UP_ORG }}
 
-      - name: Set Upbound context
-        run: up ctx upbound-demo/upbound-gcp-eu-west-3/integrated-gas/production
+      - name: Detect changed paths
+        uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            integrated-gas:
+              - 'state/solution-idp-non-prod/frontend/30-claims/integrated-gas/production/**'
+            renewables:
+              - 'state/solution-idp-non-prod/frontend/30-claims/renewables/production/**'
 
       # Hard coded for demo-purpose.
       - name: Apply manifests for integrated-gas-production
+        if: steps.changes.outputs.integrated-gas == 'true'
         run: |
+          up ctx upbound-demo/upbound-gcp-eu-west-3/integrated-gas/production
           kubectl apply -f state/solution-idp-non-prod/frontend/30-claims/integrated-gas/production/
 
       # Hard coded for demo-purpose.
       - name: Apply manifests for renewable-energy-production
+        if: steps.changes.outputs.renewables == 'true'
         run: |
+          up ctx upbound-demo/upbound-gcp-eu-west-3/renewables/production
           kubectl apply -f state/solution-idp-non-prod/frontend/30-claims/renewables/production/
