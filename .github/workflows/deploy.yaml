@@ -25,11 +25,14 @@ jobs:
         with:
           api-token: ${{ secrets.UP_API_TOKEN }}
           organization: ${{ secrets.UP_ORG }}
-                    
-      - name: Configure kubeconfig
-        run: |
-          mkdir -p $HOME/.kube
-          echo "${{ secrets.KUBECONFIG_CONTENT }}" > $HOME/.kube/config
+
+      - name: Set Upbound context
+        run: up ctx upbound-demo/upbound-gcp-eu-west-3/integrated-gas/production
+
+      # - name: Configure kubeconfig
+      #   run: |
+      #     mkdir -p $HOME/.kube
+      #     echo "${{ secrets.KUBECONFIG_CONTENT }}" > $HOME/.kube/config
 
       - name: Apply manifests
         run: |
