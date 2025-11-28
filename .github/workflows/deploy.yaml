@@ -1,0 +1,25 @@
+name: Deploy to k8s
+
+on:
+  push:
+    branches:
+      - siva-demo
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v4
+
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBECONFIG_CONTENT }}" > $HOME/.kube/config
+
+      - name: Apply manifests
+        run: |
+          kubectl apply -f state/solution-idp-non-prod/frontend/30-claims/
