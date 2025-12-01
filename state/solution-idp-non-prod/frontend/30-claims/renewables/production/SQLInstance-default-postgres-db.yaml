@@ -17,13 +17,9 @@ spec:
       key: password
       name: postgres-db
       namespace: default
-    deletionPolicy: Delete
     engine: postgres
-    engineVersion: '15'
-    provider: aws
-    providerConfigName: default
-    region: eu-west-1
-    storageGB: 10
+    purpose: development
+    region: us-west
   compositeDeletePolicy: Background
   writeConnectionSecretToRef:
     name: up-secret
