@@ -1,4 +1,4 @@
-name: Deploy to Control-plane
+name: Deploy to Control-plane and EKS
 
 on:
   push:
@@ -8,10 +8,14 @@ on:
 env:
   UP_API_TOKEN: ${{ secrets.UP_API_TOKEN }}
   UP_ORG: ${{ secrets.UP_ORG }}
+  # EKS cluster kubeconfig - store your kubeconfig content as a GitHub secret
+  EKS_KUBECONFIG: ${{ secrets.EKS_KUBECONFIG }}
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Required to commit auto-generated Kustomize files
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -37,6 +41,13 @@ jobs:
               - 'state/solution-idp-non-prod/frontend/30-claims/renewables/production/**'
             mv:
               - 'state/solution-idp-non-prod/frontend/30-claims/multiverse/production/**'
+            webapps:
+              - 'state/solution-idp-non-prod/frontend/30-claims/**/base/**'
+              - 'state/solution-idp-non-prod/frontend/30-claims/**/overlays/**'
+
+      # ============================================
+      # Upbound Control Plane Deployments (Existing)
+      # ============================================
 
       # Hard coded for demo-purpose. Deploy to integrated-gas-production.
       - name: Apply manifests for integrated-gas-production
@@ -51,10 +62,207 @@ jobs:
         run: |
           up ctx upbound-demo/upbound-gcp-eu-west-3/renewables/production
           kubectl apply -f state/solution-idp-non-prod/frontend/30-claims/renewables/production/
-      
+
       # Hard coded for demo-purpose. Deploy to multiverse-production.
       - name: Apply manifests for multiverse-production
         if: steps.changes.outputs.mv == 'true'
         run: |
           up ctx upbound-demo/upbound-gcp-eu-west-3/multiverse/production
           kubectl apply -f state/solution-idp-non-prod/frontend/30-claims/multiverse/production/
+
+      # ============================================
+      # Microservice Claims to Control Planes (with Kustomize)
+      # ============================================
+      # Backstage creates ONE base file
+      # Kustomize overlays handle environment-specific configurations
+      # Crossplane manages the entire lifecycle
+
+      - name: Auto-scaffold Kustomize Structure
+        if: steps.changes.outputs.webapps == 'true'
+        run: |
+          echo "Checking for services needing Kustomize scaffolding..."
+
+          # Find all services with base changes (new or modified)
+          CHANGED_SERVICES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | \
+            grep 'state/solution-idp-non-prod/frontend/30-claims/.*/base/' | \
+            sed 's|state/solution-idp-non-prod/frontend/30-claims/||' | \
+            cut -d'/' -f1 | \
+            sort -u)
+
+          for service in $CHANGED_SERVICES; do
+            SERVICE_PATH="state/solution-idp-non-prod/frontend/30-claims/$service"
+
+            echo "Scaffolding Kustomize structure for: $service"
+
+            # Create base/kustomization.yaml if missing
+            if [ ! -f "$SERVICE_PATH/base/kustomization.yaml" ]; then
+              echo "  Creating base/kustomization.yaml..."
+              mkdir -p "$SERVICE_PATH/base"
+              cat > "$SERVICE_PATH/base/kustomization.yaml" <<'EOF'
+          apiVersion: kustomize.config.k8s.io/v1beta1
+          kind: Kustomization
+
+          resources:
+            - webapp-claim.yaml
+
+          commonLabels:
+            managed-by: backstage
+          EOF
+            fi
+
+            # Create overlay directories and kustomization files
+            for env in dev test acc prod; do
+              OVERLAY_DIR="$SERVICE_PATH/overlays/$env"
+              mkdir -p "$OVERLAY_DIR"
+
+              if [ ! -f "$OVERLAY_DIR/kustomization.yaml" ]; then
+                echo "  Creating overlays/$env/kustomization.yaml..."
+
+                # Set namespace based on environment
+                NAMESPACE="$env"
+                if [ "$env" = "prod" ]; then
+                  NAMESPACE="production"
+                fi
+
+                cat > "$OVERLAY_DIR/kustomization.yaml" <<EOF
+          apiVersion: kustomize.config.k8s.io/v1beta1
+          kind: Kustomization
+
+          namespace: $NAMESPACE
+
+          resources:
+            - ../../base
+
+          commonLabels:
+            environment: $env
+
+          labels:
+            - pairs:
+                env: $env
+                tier: $([ "$env" = "prod" ] && echo "production" || echo "non-production")
+          EOF
+              fi
+            done
+          done
+
+          # Check if any files were created and commit them back
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "Committing auto-generated Kustomize files..."
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add state/solution-idp-non-prod/frontend/30-claims/*/overlays
+            git add state/solution-idp-non-prod/frontend/30-claims/*/base/kustomization.yaml
+            git commit -m "chore: Auto-scaffold Kustomize structure
+
+          Auto-generated by GitHub Actions for services:
+          $(echo "$CHANGED_SERVICES" | sed 's/^/- /')
+
+          [skip ci]"
+            git push
+            echo "✅ Kustomize structure committed"
+          else
+            echo "No scaffolding needed - all files exist"
+          fi
+
+      - name: Deploy WebApp Claims to All Environments
+        if: steps.changes.outputs.webapps == 'true'
+        run: |
+          echo "Detecting changed microservices..."
+
+          # Find all microservices with changes in base or overlays
+          CHANGED_SERVICES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | \
+            grep 'state/solution-idp-non-prod/frontend/30-claims/.*/\(base\|overlays\)/' | \
+            sed 's|state/solution-idp-non-prod/frontend/30-claims/||' | \
+            cut -d'/' -f1 | \
+            sort -u)
+
+          if [ -z "$CHANGED_SERVICES" ]; then
+            echo "No microservice claims changed"
+            exit 0
+          fi
+
+          echo "Changed microservices:"
+          echo "$CHANGED_SERVICES"
+
+          # Deploy to each environment
+          for service in $CHANGED_SERVICES; do
+            echo ""
+            echo "========================================"
+            echo "Deploying: $service"
+            echo "========================================"
+
+            SERVICE_PATH="state/solution-idp-non-prod/frontend/30-claims/$service"
+
+            # Verify Kustomize structure exists (should be auto-scaffolded by now)
+            if [ ! -d "$SERVICE_PATH/base" ]; then
+              echo "⚠️  Skipping $service - no Kustomize base directory found"
+              continue
+            fi
+
+            # Deploy to DEV
+            if [ -d "$SERVICE_PATH/overlays/dev" ]; then
+              echo ""
+              echo "📦 Deploying $service to DEV..."
+              up ctx upbound-demo/upbound-gcp-eu-west-3/solution-idp-non-prod/dev
+              kubectl apply -k "$SERVICE_PATH/overlays/dev"
+              echo "✅ DEV deployment complete"
+            fi
+
+            # Deploy to TEST
+            if [ -d "$SERVICE_PATH/overlays/test" ]; then
+              echo ""
+              echo "📦 Deploying $service to TEST..."
+              up ctx upbound-demo/upbound-gcp-eu-west-3/solution-idp-non-prod/test
+              kubectl apply -k "$SERVICE_PATH/overlays/test"
+              echo "✅ TEST deployment complete"
+            fi
+
+            # Deploy to ACC
+            if [ -d "$SERVICE_PATH/overlays/acc" ]; then
+              echo ""
+              echo "📦 Deploying $service to ACC..."
+              up ctx upbound-demo/upbound-gcp-eu-west-3/solution-idp-non-prod/acc
+              kubectl apply -k "$SERVICE_PATH/overlays/acc"
+              echo "✅ ACC deployment complete"
+            fi
+
+            # Deploy to PROD (with extra confirmation in logs)
+            if [ -d "$SERVICE_PATH/overlays/prod" ]; then
+              echo ""
+              echo "📦 Deploying $service to PRODUCTION..."
+              echo "⚠️  PRODUCTION DEPLOYMENT - Proceeding..."
+              up ctx upbound-demo/upbound-gcp-eu-west-3/solution-idp-non-prod/production
+              kubectl apply -k "$SERVICE_PATH/overlays/prod"
+              echo "✅ PRODUCTION deployment complete"
+            fi
+          done
+
+          echo ""
+          echo "========================================"
+          echo "All deployments complete!"
+          echo "========================================"
+
+      - name: Verify WebApp Claims
+        if: steps.changes.outputs.webapps == 'true'
+        run: |
+          echo "=== Verifying WebApp Claims across environments ==="
+
+          echo ""
+          echo "DEV Environment:"
+          up ctx upbound-demo/upbound-gcp-eu-west-3/solution-idp-non-prod/dev
+          kubectl get webapps -A 2>/dev/null || echo "No WebApps found"
+
+          echo ""
+          echo "TEST Environment:"
+          up ctx upbound-demo/upbound-gcp-eu-west-3/solution-idp-non-prod/test
+          kubectl get webapps -A 2>/dev/null || echo "No WebApps found"
+
+          echo ""
+          echo "ACC Environment:"
+          up ctx upbound-demo/upbound-gcp-eu-west-3/solution-idp-non-prod/acc
+          kubectl get webapps -A 2>/dev/null || echo "No WebApps found"
+
+          echo ""
+          echo "PRODUCTION Environment:"
+          up ctx upbound-demo/upbound-gcp-eu-west-3/solution-idp-non-prod/production
+          kubectl get webapps -A 2>/dev/null || echo "No WebApps found"
