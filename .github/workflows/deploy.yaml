@@ -35,17 +35,26 @@ jobs:
               - 'state/solution-idp-non-prod/frontend/30-claims/integrated-gas/production/**'
             renewables:
               - 'state/solution-idp-non-prod/frontend/30-claims/renewables/production/**'
+            mv:
+              - 'state/solution-idp-non-prod/frontend/30-claims/multiverse/production/**'
 
-      # Hard coded for demo-purpose.
+      # Hard coded for demo-purpose. Deploy to integrated-gas-production.
       - name: Apply manifests for integrated-gas-production
         if: steps.changes.outputs.integrated-gas == 'true'
         run: |
           up ctx upbound-demo/upbound-gcp-eu-west-3/integrated-gas/production
           kubectl apply -f state/solution-idp-non-prod/frontend/30-claims/integrated-gas/production/
 
-      # Hard coded for demo-purpose.
+      # Hard coded for demo-purpose. Deploy to Renewable-energy-production.
       - name: Apply manifests for renewable-energy-production
         if: steps.changes.outputs.renewables == 'true'
         run: |
           up ctx upbound-demo/upbound-gcp-eu-west-3/renewables/production
           kubectl apply -f state/solution-idp-non-prod/frontend/30-claims/renewables/production/
+      
+      # Hard coded for demo-purpose. Deploy to multiverse-production.
+      - name: Apply manifests for multiverse-production
+        if: steps.changes.outputs.mv == 'true'
+        run: |
+          up ctx upbound-demo/upbound-gcp-eu-west-3/multiverse/production
+          kubectl apply -f state/solution-idp-non-prod/frontend/30-claims/multiverse/production/
