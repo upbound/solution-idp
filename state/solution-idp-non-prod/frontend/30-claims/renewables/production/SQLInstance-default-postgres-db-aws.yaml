@@ -13,10 +13,6 @@ metadata:
   namespace: default
 spec:
   parameters:
-    passwordSecretRef:
-      key: password
-      name: postgres-db-secret
-      namespace: default
     engine: postgres
     provider: aws
     purpose: development
