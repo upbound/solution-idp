@@ -1,0 +1,23 @@
+apiVersion: dbaas.multiverse.com/v1alpha1
+kind: SQLInstance
+metadata:
+  annotations:
+    upbound.backstage.io/source-info: >-
+      {"pushToGit":true,"gitBranch":"siva-demo","gitRepo":"github.com?owner=upbound&repo=solution-idp","gitLayout":"cluster-scoped","basePath":"multiverse-control-plane/default/SQLInstance"}
+    upbound.backstage.io/add-to-catalog: 'true'
+    upbound.backstage.io/owner: group:default/platform-enginneer
+    upbound.backstage.io/system: default
+    upbound.backstage.io/source-file-url: >-
+      https://github.com/upbound/solution-idp/blob/siva-demo/state/solution-idp-non-prod/frontend/30-claims/multiverse/production/SQLInstance-default-knowledge-db-sql.yaml
+  name: knowledge-db-sql
+  namespace: default
+spec:
+  parameters:
+    engine: mysql
+    purpose: development
+    provider: aws
+    region: europe-west
+  compositeDeletePolicy: Background
+  writeConnectionSecretToRef:
+    name: up-secret-mysql
+  compositionUpdatePolicy: Automatic
