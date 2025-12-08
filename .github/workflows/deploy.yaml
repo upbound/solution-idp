@@ -35,12 +35,12 @@ jobs:
         id: changes
         with:
           filters: |
-            # integrated-gas:
-            #   - 'state/solution-idp-non-prod/frontend/30-claims/integrated-gas/production/**'
-            # renewables:
-            #   - 'state/solution-idp-non-prod/frontend/30-claims/renewables/production/**'
-            mv:
-              - 'state/solution-idp-non-prod/frontend/30-claims/multiverse/production/**'
+            integrated-gas:
+              - 'state/solution-idp-non-prod/frontend/30-claims/integrated-gas/production/**'
+            renewables:
+              - 'state/solution-idp-non-prod/frontend/30-claims/renewables/production/**'
+            # mv:
+            #   - 'state/solution-idp-non-prod/frontend/30-claims/multiverse/production/**'
 
       # ============================================
       # ☁️ Upbound Control Plane Deployments
