@@ -36,11 +36,9 @@ jobs:
         with:
           filters: |
             integrated-gas:
-              - 'state/solution-idp-non-prod/frontend/30-claims/integrated-gas/production/**'
+              - 'domains/integrated-gas/production/**'
             renewables:
-              - 'state/solution-idp-non-prod/frontend/30-claims/renewables/production/**'
-            mv:
-              - 'state/solution-idp-non-prod/frontend/30-claims/multiverse/production/**'
+              - 'domains/renewables/production/**'
 
       # ============================================
       # ☁️ Upbound Control Plane Deployments
@@ -51,11 +49,11 @@ jobs:
         if: steps.changes.outputs.integrated-gas == 'true'
         run: |
           up ctx upbound-demo/upbound-gcp-eu-west-3/integrated-gas/production
-          kubectl apply -f state/solution-idp-non-prod/frontend/30-claims/integrated-gas/production/
+          kubectl apply -f domains/integrated-gas/production/
 
       # Hard coded for demo-purpose. Deploy to Renewable-energy-production.
       - name: 🌱 Deploy Renewable Energy (Production)
         if: steps.changes.outputs.renewables == 'true'
         run: |
           up ctx upbound-demo/upbound-gcp-eu-west-3/renewables/production
-          kubectl apply -f state/solution-idp-non-prod/frontend/30-claims/renewables/production/
+          kubectl apply -f domains/renewables/production/
