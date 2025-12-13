@@ -1,0 +1,22 @@
+apiVersion: platform.shell.com/v1alpha1
+kind: VirtualNetwork
+metadata:
+  annotations:
+    upbound.backstage.io/source-info: >-
+      {"pushToGit":true,"gitBranch":"siva-demo","gitRepo":"github.com?owner=upbound&repo=solution-idp","gitLayout":"cluster-scoped","basePath":"integrated-gas-control-plane/default/VirtualNetwork"}
+    upbound.backstage.io/add-to-catalog: 'true'
+    upbound.backstage.io/owner: group:default/platform-enginner
+    upbound.backstage.io/system: default
+    upbound.backstage.io/source-file-url: >-
+      https://github.com/upbound/solution-idp/blob/siva-demo/domains/integrated-gas/production/VirtualNetwork-default-secured-network-aws.yaml
+  name: secured-network-aws
+  namespace: default
+spec:
+  parameters:
+    cidrBlock: 10.0.0.0/16
+    provider: aws
+    region: europe-west
+    tags:
+      ProjectCode: cc-153
+  crossplane:
+    compositionUpdatePolicy: Automatic
