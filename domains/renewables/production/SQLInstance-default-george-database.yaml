@@ -1,0 +1,23 @@
+apiVersion: dbaas.shell.com/v1alpha1
+kind: SQLInstance
+metadata:
+  annotations:
+    upbound.backstage.io/source-info: >-
+      {"pushToGit":true,"gitBranch":"siva-demo","gitRepo":"github.com?owner=upbound&repo=solution-idp","gitLayout":"cluster-scoped","basePath":"renewables-control-plane/default/SQLInstance"}
+    upbound.backstage.io/add-to-catalog: 'true'
+    upbound.backstage.io/owner: group:default/george
+    upbound.backstage.io/system: default
+    upbound.backstage.io/source-file-url: >-
+      https://github.com/upbound/solution-idp/blob/siva-demo/domains/renewables/production/SQLInstance-default-george-database.yaml
+  name: george-database
+  namespace: default
+spec:
+  parameters:
+    engine: postgres
+    provider: aws
+    purpose: testing
+    region: europe-west
+  compositeDeletePolicy: Background
+  writeConnectionSecretToRef:
+    name: george-database-connection
+  compositionUpdatePolicy: Automatic
