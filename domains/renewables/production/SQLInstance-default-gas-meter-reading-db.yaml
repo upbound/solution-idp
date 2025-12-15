@@ -5,7 +5,7 @@ metadata:
     upbound.backstage.io/source-info: >-
       {"pushToGit":true,"gitBranch":"siva-demo","gitRepo":"github.com?owner=upbound&repo=solution-idp","gitLayout":"cluster-scoped","basePath":"renewables-control-plane/default/SQLInstance"}
     upbound.backstage.io/add-to-catalog: 'true'
-    upbound.backstage.io/owner: group:default/platform-engineer
+    upbound.backstage.io/owner: group:default/george
     upbound.backstage.io/system: default
     upbound.backstage.io/source-file-url: >-
       https://github.com/upbound/solution-idp/blob/siva-demo/domains/renewables/production/SQLInstance-default-gas-meter-reading-db.yaml
@@ -19,5 +19,5 @@ spec:
     region: europe-west
   compositeDeletePolicy: Background
   writeConnectionSecretToRef:
-    name: gas-meter-reading-db-connection
+    name: gas-meter-reading-db-secrets
   compositionUpdatePolicy: Automatic
